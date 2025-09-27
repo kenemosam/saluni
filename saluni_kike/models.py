@@ -44,6 +44,10 @@ class Salon(models.Model):
     email = models.EmailField(blank=True, null=True)
     website = models.URLField(blank=True, null=True)
 
+    # Social media links
+    facebook = models.URLField(blank=True, null=True)   # Facebook link
+    instagram = models.URLField(blank=True, null=True)  # Instagram link
+
     # opening_hours can be a JSON object like {"mon":["09:00","18:00"], ...}
     opening_hours = models.JSONField(blank=True, null=True)
 
@@ -58,6 +62,7 @@ class Salon(models.Model):
 
     def average_rating(self):
         return self.reviews.aggregate(models.Avg('rating'))['rating__avg']
+
 
 
 class Service(models.Model):
@@ -185,3 +190,17 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.rating}⭐ — {self.salon.name} by {self.customer.username}"
+
+
+# saluni_kike/forms.py
+from django import forms
+from .models import Salon
+
+class SalonQuickForm(forms.ModelForm):
+    class Meta:
+        model = Salon
+        fields = ['name', 'phone']  # field chache tu
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Jina la saluni'}),
+            'phone': forms.TextInput(attrs={'placeholder': 'Namba ya simu'}),
+        }

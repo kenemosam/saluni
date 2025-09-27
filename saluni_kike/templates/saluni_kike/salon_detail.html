@@ -1,9 +1,13 @@
 {% extends "base.html" %}
-{% block content %}
 
+{% block head %}
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
 <section class="salon-detail-section">
     <div class="container">
-        <!-- Salon Header -->
         <div class="salon-header">
             <div class="salon-image">
                 {% if salon.picha_kuu %}
@@ -14,20 +18,51 @@
             </div>
             <div class="salon-info">
                 <h1>{{ salon.name }}</h1>
-                <p><i class="fas fa-map-marker-alt"></i> {{ salon.street }}, {{ salon.district }}, {{ salon.region }}</p>
+
+                <p>
+                    <i class="fas fa-map-pin" style="color:#ff4fa1;"></i>
+                    {{ salon.street }}, {{ salon.district }}, {{ salon.region }}
+                </p>
+
                 {% if salon.phone %}
-                <p><i class="fas fa-phone-alt"></i> {{ salon.phone }}</p>
+                <p>
+                    <i class="fas fa-phone-alt" style="color:#4caf50;"></i>
+                    {{ salon.phone }}
+                </p>
                 {% endif %}
+
+                {% if salon.facebook %}
+                <p>
+                    <i class="fab fa-facebook" style="color:#1877f2;"></i>
+                    <a href="{{ salon.facebook }}" target="_blank">{{ salon.facebook }}</a>
+                </p>
+                {% endif %}
+
+                {% if salon.instagram %}
+                <p>
+                    <i class="fab fa-instagram" style="color:#e1306c;"></i>
+                    <a href="{{ salon.instagram }}" target="_blank">{{ salon.instagram }}</a>
+                </p>
+                {% endif %}
+
                 {% if salon.email %}
-                <p><i class="fas fa-envelope"></i> {{ salon.email }}</p>
+                <p>
+                    <i class="fas fa-envelope" style="color:#ff9800;"></i>
+                    {{ salon.email }}
+                </p>
                 {% endif %}
+
                 {% if salon.website %}
-                <p><i class="fas fa-globe"></i> <a href="{{ salon.website }}" target="_blank">{{ salon.website }}</a></p>
+                <p>
+                    <i class="fas fa-globe" style="color:#3f51b5;"></i>
+                    <a href="{{ salon.website }}" target="_blank">{{ salon.website }}</a>
+                </p>
                 {% endif %}
+
+                <a href="{% url 'salon_update_profile' salon.id %}" class="edit-profile-btn">Edit Profile</a>
             </div>
         </div>
 
-        <!-- Description -->
         {% if salon.description %}
         <div class="salon-description">
             <h2>Maelezo ya Salon</h2>
@@ -35,7 +70,6 @@
         </div>
         {% endif %}
 
-        <!-- Services -->
         {% if salon.services.all %}
         <div class="salon-services">
             <h2>Huduma Zilizopo</h2>
@@ -60,7 +94,6 @@
         </div>
         {% endif %}
 
-        <!-- Stylists -->
         {% if salon.stylists.all %}
         <div class="salon-stylists">
             <h2>Stylists</h2>
@@ -84,7 +117,6 @@
         </div>
         {% endif %}
 
-        <!-- Reviews -->
         {% if salon.reviews.all %}
         <div class="salon-reviews">
             <h2>Reviews</h2>
@@ -125,6 +157,26 @@ body { font-family: 'Mulish', sans-serif; background:#fff5f8; color:#333; }
 
 .review-card { background:#fff; padding:15px; border-radius:15px; box-shadow:0 6px 20px rgba(0,0,0,0.1); margin-bottom:15px; }
 .review-card p { margin:5px 0; }
-</style>
 
+.edit-profile-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #ff4fa1;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    margin-top: 15px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+.edit-profile-btn:hover {
+    background: #c2185b;
+}
+
+/* Hover effect for icons */
+.salon-info i:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s;
+}
+</style>
 {% endblock %}

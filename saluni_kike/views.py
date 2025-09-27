@@ -41,25 +41,41 @@ def create_booking(request):
         return render(request, 'saluni_kike/create_booking.html', {'salons': salons})
 
 
-# saluni_kike/views.py
+
+
+    # saluni_kike/views.py
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from .forms import SalonForm
 
 def salon_register(request):
-    """
-    View to register a salon. Template's JS will attempt to fill latitude & longitude fields.
-    """
     if request.method == 'POST':
         form = SalonForm(request.POST)
         if form.is_valid():
-            salon = form.save()
-            messages.success(request, f"Saluni '{salon.name}' imefanikiwa kusajiliwa.")
-            return redirect('salon_detail', salon_id=salon.id)  # adjust route name as needed
-        else:
-            messages.error(request, "Tafadhali kagua taarifa ulizozitoa.")
+            salon = form.save()  # saluni mpya
+            # unaweza kumpeleka user dashboard au hatua inayofuata
+            return redirect('salon_list')  # badilisha kulingana na url yako
     else:
         form = SalonForm()
-
     return render(request, 'saluni_kike/salon_register.html', {'form': form})
+
+
+# saluni_kike/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Salon
+from .forms import SalonProfileForm
+
+def salon_update_profile(request, salon_id):
+    salon = get_object_or_404(Salon, id=salon_id)
+
+    if request.method == 'POST':
+        form = SalonProfileForm(request.POST, instance=salon)
+        if form.is_valid():
+            form.save()
+            return redirect('salon_list')  # au profile page
+    else:
+        form = SalonProfileForm(instance=salon)
+
+    return render(request, 'saluni_kike/update_profile.html', {'form': form})
+
+
 

@@ -8,4 +8,6 @@ urlpatterns = [
     path('salons-json/', views.salon_list_json, name='salon_list_json'),
     path('booking/create/', views.create_booking, name='create_booking'),
     path('salon/register/', views.salon_register, name='salon_register'),
+    path('salon/<int:salon_id>/update/', views.salon_update_profile, name='salon_update_profile'),
+
 ]
