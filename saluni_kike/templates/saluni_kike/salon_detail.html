@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="salon-detail-section">
+    <div class="container">
+        <!-- Salon Header -->
+        <div class="salon-header">
+            <div class="salon-image">
+                {% if salon.picha_kuu %}
+                    <img src="{{ salon.picha_kuu.url }}" alt="{{ salon.name }}">
+                {% else %}
+                    <img src="https://picsum.photos/800/400?random=1" alt="{{ salon.name }}">
+                {% endif %}
+            </div>
+            <div class="salon-info">
+                <h1>{{ salon.name }}</h1>
+                <p><i class="fas fa-map-marker-alt"></i> {{ salon.street }}, {{ salon.district }}, {{ salon.region }}</p>
+                {% if salon.phone %}
+                <p><i class="fas fa-phone-alt"></i> {{ salon.phone }}</p>
+                {% endif %}
+                {% if salon.email %}
+                <p><i class="fas fa-envelope"></i> {{ salon.email }}</p>
+                {% endif %}
+                {% if salon.website %}
+                <p><i class="fas fa-globe"></i> <a href="{{ salon.website }}" target="_blank">{{ salon.website }}</a></p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Description -->
+        {% if salon.description %}
+        <div class="salon-description">
+            <h2>Maelezo ya Salon</h2>
+            <p>{{ salon.description }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Services -->
+        {% if salon.services.all %}
+        <div class="salon-services">
+            <h2>Huduma Zilizopo</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Huduma</th>
+                        <th>Muda (dakika)</th>
+                        <th>Bei (TSh)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in salon.services.all %}
+                    <tr>
+                        <td>{{ service.name }}</td>
+                        <td>{{ service.duration_minutes }}</td>
+                        <td>{{ service.price|floatformat:0 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- Stylists -->
+        {% if salon.stylists.all %}
+        <div class="salon-stylists">
+            <h2>Stylists</h2>
+            <div class="stylist-grid">
+                {% for stylist in salon.stylists.all %}
+                <div class="stylist-card">
+                    <div class="stylist-photo">
+                        {% if stylist.photo %}
+                            <img src="{{ stylist.photo }}" alt="{{ stylist.name }}">
+                        {% else %}
+                            <img src="https://picsum.photos/200/200?random={{ forloop.counter }}" alt="{{ stylist.name }}">
+                        {% endif %}
+                    </div>
+                    <h3>{{ stylist.name }}</h3>
+                    {% if stylist.specialties %}
+                    <p>{{ stylist.specialties }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Reviews -->
+        {% if salon.reviews.all %}
+        <div class="salon-reviews">
+            <h2>Reviews</h2>
+            {% for review in salon.reviews.all %}
+            <div class="review-card">
+                <p><strong>{{ review.customer.username }}</strong> — {{ review.rating }}⭐</p>
+                <p>{{ review.comment }}</p>
+                <small>{{ review.created_at|date:"d M Y H:i" }}</small>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+body { font-family: 'Mulish', sans-serif; background:#fff5f8; color:#333; }
+.container { max-width:1200px; margin:0 auto; padding:20px; }
+
+.salon-header { display:flex; flex-wrap:wrap; gap:20px; margin-bottom:30px; }
+.salon-image img { width:100%; max-width:500px; border-radius:15px; }
+.salon-info { flex:1; min-width:250px; }
+.salon-info h1 { font-size:2rem; color:#ff4fa1; margin-bottom:10px; }
+.salon-info p { font-size:0.95rem; margin:5px 0; display:flex; align-items:center; gap:5px; }
+
+.salon-description { margin-bottom:30px; }
+.salon-description h2 { font-size:1.5rem; color:#c2185b; margin-bottom:10px; }
+
+.salon-services h2, .salon-stylists h2, .salon-reviews h2 { font-size:1.5rem; color:#c2185b; margin-bottom:15px; }
+
+.salon-services table { width:100%; border-collapse:collapse; margin-bottom:30px; }
+.salon-services th, .salon-services td { padding:10px; border:1px solid #ddd; text-align:left; }
+.salon-services th { background:#ffb6c1; color:#fff; }
+
+.stylist-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:20px; }
+.stylist-card { background:#fff; border-radius:15px; box-shadow:0 8px 25px rgba(0,0,0,0.15); overflow:hidden; text-align:center; padding:15px; }
+.stylist-card img { width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:10px; }
+
+.review-card { background:#fff; padding:15px; border-radius:15px; box-shadow:0 6px 20px rgba(0,0,0,0.1); margin-bottom:15px; }
+.review-card p { margin:5px 0; }
+</style>
+
+{% endblock %}

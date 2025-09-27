@@ -1,0 +1,50 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+saluni_env/      # Your virtual environment folder name
+
+# Django stuff:
+*.sqlite3         # Local database (if using SQLite)
+db.sqlite3        # common SQLite DB
+*.log             # Log files
+*.pot
+*.pyc
+
+# Django migrations (optionally commit migrations for production)
+*/migrations/*.pyc
+*/migrations/*.pyo
+*/migrations/__pycache__/
+
+# Media / uploaded files
+media/
+uploads/
+
+# Static files (collected by collectstatic)
+staticfiles/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+*.env
+
+# Python packaging
+*.egg-info/
+dist/
+build/
+
+# Pytest cache
+.pytest_cache/

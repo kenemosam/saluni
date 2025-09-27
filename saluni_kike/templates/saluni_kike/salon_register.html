@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<h1>Sajili Saluni</h1>
+
+<form method="post" id="salon-form" novalidate>
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+
+  <div>
+    <label for="{{ form.name.id_for_label }}">Jina la Saluni</label><br>
+    {{ form.name.errors }}{{ form.name }}
+  </div>
+
+  <div>
+    <label for="{{ form.description.id_for_label }}">Maelezo</label><br>
+    {{ form.description.errors }}{{ form.description }}
+  </div>
+
+  <div>
+    <label for="{{ form.address.id_for_label }}">Anuani (Address)</label><br>
+    {{ form.address.errors }}{{ form.address }}
+  </div>
+
+  <div>
+    <label for="{{ form.region.id_for_label }}">Mkoa</label><br>
+    {{ form.region.errors }}{{ form.region }}
+  </div>
+
+  <div>
+    <label for="{{ form.district.id_for_label }}">Wilaya</label><br>
+    {{ form.district.errors }}{{ form.district }}
+  </div>
+
+  <div>
+    <label for="{{ form.street.id_for_label }}">Mtaa</label><br>
+    {{ form.street.errors }}{{ form.street }}
+  </div>
+
+  <div>
+    <label for="{{ form.phone.id_for_label }}">Simu</label><br>
+    {{ form.phone.errors }}{{ form.phone }}
+  </div>
+
+  <div>
+    <label for="{{ form.email.id_for_label }}">Email (hiari)</label><br>
+    {{ form.email.errors }}{{ form.email }}
+  </div>
+
+  <div>
+    <label for="{{ form.website.id_for_label }}">Website (hiari)</label><br>
+    {{ form.website.errors }}{{ form.website }}
+  </div>
+
+  <!-- Hidden GPS fields -->
+  {{ form.latitude }}
+  {{ form.longitude }}
+
+  <div>
+    <button type="submit">Sajili Saluni</button>
+  </div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const latInput = document.getElementById('id_latitude');
+    const lngInput = document.getElementById('id_longitude');
+
+    if (navigator.geolocation) {
+        // Capture GPS silently
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                latInput.value = position.coords.latitude.toFixed(6);
+                lngInput.value = position.coords.longitude.toFixed(6);
+            },
+            function(error) {
+                // Fail silently; mteja atachagua manually region/district/street
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
+    }
+});
+</script>
+{% endblock %}
