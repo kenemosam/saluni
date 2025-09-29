@@ -1,23 +1,106 @@
 {% extends "base.html" %}
+
+{% block head %}
+<!-- Phosphor Icons -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+{% endblock %}
+
 {% block content %}
-<h1>Sajili Saluni (Hatua ya Kwanza)</h1>
+<section class="salon-register-section">
+  <div class="container">
+    <h1><i class="ph ph-scissors" style="color:#ff4fa1;"></i> Sajili Saluni</h1>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.non_field_errors }}
+    <form method="post" class="register-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
 
-  <div>
-    <label for="{{ form.name.id_for_label }}">Jina la Saluni</label><br>
-    {{ form.name.errors }}{{ form.name }}
+      <div class="form-group">
+        <label for="{{ form.name.id_for_label }}">
+          <i class="ph ph-user" style="color:#c2185b;"></i> Jina la Saluni
+        </label>
+        {{ form.name.errors }}
+        {{ form.name }}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.phone.id_for_label }}">
+          <i class="ph ph-phone" style="color:#4caf50;"></i> Simu
+        </label>
+        {{ form.phone.errors }}
+        {{ form.phone }}
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="submit-btn">
+          <i class="ph ph-arrow-right" style="margin-right:6px;"></i> Sajili
+        </button>
+      </div>
+    </form>
   </div>
+</section>
 
-  <div>
-    <label for="{{ form.phone.id_for_label }}">Simu</label><br>
-    {{ form.phone.errors }}{{ form.phone }}
-  </div>
+<style>
+/* Use same font as navbar */
+body, h1, label, input, button {
+    font-family: 'Mulish', sans-serif;  /* navbar font */
+}
 
-  <div>
-    <button type="submit">Sajili</button>
-  </div>
-</form>
+/* Section styling */
+.salon-register-section { 
+    padding:30px 20px; 
+    background:#fff5f8; 
+    border-radius:15px; 
+    max-width:500px; 
+    margin:20px auto; 
+}
+.container { width:100%; }
+
+/* Heading */
+h1 { 
+    font-size:1.8rem; 
+    color:#4b6cb7; /* readable against light background */
+    margin-bottom:20px; 
+    display:flex; 
+    align-items:center; 
+    gap:8px; 
+}
+
+/* Form layout */
+.register-form { display:flex; flex-direction:column; gap:20px; }
+
+.form-group label { 
+    font-weight:bold; 
+    margin-bottom:5px; 
+    display:flex; 
+    align-items:center; 
+    gap:6px; 
+    color:#182848; /* readable dark text */
+}
+.form-group input {
+    width:100%;
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-size:1rem;
+    background:#fff;
+    color:#182848; /* input text color */
+}
+
+/* Submit button */
+.form-actions { margin-top:20px; text-align:center; }
+.submit-btn {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(90deg, #4b6cb7, #182848); /* navbar gradient */
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    padding:10px 20px;
+    font-weight:bold;
+    cursor:pointer;
+    transition: opacity 0.3s;
+}
+.submit-btn:hover { opacity:0.9; }
+</style>
 {% endblock %}

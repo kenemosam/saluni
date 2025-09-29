@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <title>{% block title %}Saluni{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Add Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <style>
         /* Reset & body */
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -12,18 +16,23 @@
 
         /* Header & Navbar */
         header { 
-            background: linear-gradient(90deg, #4b6cb7, #182848); /* Blue-purple gradient */
-            color:#fff; 
+            background: linear-gradient(90deg, #4b6cb7, #182848);
             padding:15px 20px; 
-            position:relative; 
             display:flex; 
             justify-content:space-between; 
             align-items:center; 
             flex-wrap:wrap; 
         }
-        header h1 { font-size:1.5rem; }
+        header h1 { 
+            font-size:1.5rem; 
+            color: #fff;  /* ensure white title on all pages */
+        }
         nav { display:flex; gap:15px; }
-        nav a { color:#fff; text-decoration:none; padding:8px 12px; border-radius:8px; transition:0.3s; }
+        nav a { 
+            color:#fff; text-decoration:none; 
+            padding:8px 12px; border-radius:8px; 
+            transition:0.3s; display:flex; align-items:center; gap:6px;
+        }
         nav a:hover { background: rgba(255,255,255,0.2); }
 
         /* Hamburger for mobile */
@@ -52,8 +61,8 @@
             <div></div>
         </div>
         <nav id="navbar">
-            <a href="/salons/">Salons</a>
-            <a href="/salon/register/">Register Salon</a>
+            <a href="/salons/"><i class="ph ph-scissors"></i> Salons</a>
+            <a href="/salon/register/"><i class="ph ph-note-pencil"></i> Register Salon</a>
         </nav>
     </header>
 

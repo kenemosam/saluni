@@ -1,31 +1,59 @@
 {% extends "base.html" %}
+{% block head %}
+<!-- Phosphor Icons -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+{% endblock %}
+
 {% block content %}
-<h1>Update Profile ya Saluni</h1>
+<section class="salon-update-section">
+  <div class="container">
+    <h1><i class="ph ph-scissors"></i> Update Profile ya Saluni</h1>
 
-<form method="post" id="salon-update-form">
-  {% csrf_token %}
-  {{ form.non_field_errors }}
+    <form method="post" id="salon-update-form" class="update-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
 
-  {% for field in form %}
-    {% if field.name != 'latitude' and field.name != 'longitude' %}
-      <div>
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label><br>
-        {{ field.errors }}
-        {{ field }}
+      {% for field in form %}
+        {% if field.name != 'latitude' and field.name != 'longitude' %}
+          <div class="form-group">
+            <label for="{{ field.id_for_label }}">
+              {% if field.name == "name" %}
+                <i class="ph ph-user"></i>
+              {% elif field.name == "phone" %}
+                <i class="ph ph-phone"></i>
+              {% elif field.name == "email" %}
+                <i class="ph ph-envelope"></i>
+              {% elif field.name == "website" %}
+                <i class="ph ph-globe"></i>
+              {% elif field.name == "facebook" %}
+                <i class="ph ph-facebook-logo"></i>
+              {% elif field.name == "instagram" %}
+                <i class="ph ph-instagram-logo"></i>
+              {% else %}
+                <i class="ph ph-pencil-line"></i>
+              {% endif %}
+              {{ field.label }}
+            </label>
+            {{ field.errors }}
+            {{ field }}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <!-- Hidden fields rendered manually -->
+      <div style="display:none;">
+          {{ form.latitude }}
+          {{ form.longitude }}
       </div>
-    {% endif %}
-  {% endfor %}
 
-  <!-- Hidden fields rendered manually -->
-  <div style="display:none;">
-      {{ form.latitude }}
-      {{ form.longitude }}
+      <div class="form-actions">
+        <button type="submit" class="save-btn">
+          <i class="ph ph-floppy-disk" style="margin-right:6px;"></i> Hifadhi Taarifa
+        </button>
+      </div>
+    </form>
   </div>
-
-  <div>
-    <button type="submit">Hifadhi Taarifa</button>
-  </div>
-</form>
+</section>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -46,4 +74,71 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+<style>
+/* Section styling (soft background, rounded like navbar theme) */
+.salon-update-section { 
+  padding:30px 20px; 
+  background:linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  border-radius:15px; 
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  margin-top:20px;
+}
+.container { max-width:800px; margin:0 auto; }
+
+/* Title */
+h1 { 
+  font-size:1.8rem; 
+  color:#182848; 
+  margin-bottom:20px; 
+  display:flex; 
+  align-items:center; 
+  gap:8px; 
+}
+
+/* Form */
+.update-form { display:flex; flex-direction:column; gap:20px; }
+.form-group label { 
+  font-weight:600; 
+  margin-bottom:5px; 
+  display:flex; 
+  align-items:center; 
+  gap:6px; 
+  color:#4b6cb7; 
+}
+.form-group input, 
+.form-group textarea, 
+.form-group select {
+  width:100%;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  font-size:1rem;
+  background:#fff;
+  transition:0.3s;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color:#4b6cb7;
+  outline:none;
+  box-shadow:0 0 6px rgba(75,108,183,0.3);
+}
+
+/* Button */
+.form-actions { margin-top:20px; }
+.save-btn {
+  display:inline-flex;
+  align-items:center;
+  background: linear-gradient(90deg, #4b6cb7, #182848);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:12px 24px;
+  font-weight:600;
+  cursor:pointer;
+  transition:background 0.3s, transform 0.2s;
+}
+.save-btn:hover { background:linear-gradient(90deg, #5c7bd6, #243465); transform:translateY(-2px); }
+</style>
 {% endblock %}
