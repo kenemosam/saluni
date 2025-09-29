@@ -3,6 +3,8 @@
 {% block head %}
 <!-- Phosphor Icons -->
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -75,24 +77,25 @@
         {% if salon.services.all %}
         <div class="salon-services">
             <h2><i class="ph ph-list-bullets" style="color:#c2185b;"></i> Huduma Zilizopo</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Huduma</th>
-                        <th>Muda (dakika)</th>
-                        <th>Bei (TSh)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for service in salon.services.all %}
-                    <tr>
-                        <td>{{ service.name }}</td>
-                        <td>{{ service.duration_minutes }}</td>
-                        <td>{{ service.price|floatformat:0 }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="hairstyles-scroll">
+                {% for service in salon.services.all %}
+                <div class="hairstyle-card">
+                    {% if service.image %}
+                        <img src="{{ service.image.url }}" alt="{{ service.name }}">
+                    {% else %}
+                        <img src="https://picsum.photos/200/200?random={{ forloop.counter }}" alt="{{ service.name }}">
+                    {% endif %}
+                    <div class="hairstyle-info">
+                        <p class="name">
+                            <i class="ph ph-scissors"></i> {{ service.name }}
+                        </p>
+                        <p class="price">
+                            <i class="ph ph-currency-circle-dollar"></i> TSh {{ service.price|floatformat:0 }}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
         {% endif %}
 
@@ -135,7 +138,7 @@
 </section>
 
 <style>
-body { font-family: 'Mulish', sans-serif; background:#fff5f8; color:#333; }
+body { font-family: 'Poppins', sans-serif; background:#fff5f8; color:#333; }
 .container { max-width:1200px; margin:0 auto; padding:20px; }
 
 /* Header */
@@ -146,7 +149,7 @@ body { font-family: 'Mulish', sans-serif; background:#fff5f8; color:#333; }
 .salon-info p { font-size:0.95rem; margin:5px 0; display:flex; align-items:center; gap:5px; }
 
 /* Sections */
-.salon-description, .salon-services, .salon-stylists, .salon-reviews {
+.salon-description, .salon-stylists, .salon-reviews {
     margin-bottom:30px; padding:20px; background:#fff; border-radius:15px; 
     box-shadow:0 6px 15px rgba(0,0,0,0.08);
 }
@@ -157,10 +160,54 @@ body { font-family: 'Mulish', sans-serif; background:#fff5f8; color:#333; }
     font-size:1.5rem; color:#4b6cb7; margin-bottom:15px; display:flex; align-items:center; gap:8px;
 }
 
-/* Services table */
-.salon-services table { width:100%; border-collapse:collapse; margin-bottom:15px; }
-.salon-services th, .salon-services td { padding:10px; border:1px solid #ddd; text-align:left; }
-.salon-services th { background:#4b6cb7; color:#fff; }
+/* Make Huduma container transparent */
+.salon-services {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* Hairstyles horizontal scroll */
+.hairstyles-scroll {
+    display:flex;
+    overflow-x:auto;
+    gap:15px;
+    padding-bottom:10px;
+    scroll-snap-type:x mandatory;
+}
+.hairstyle-card {
+    flex:0 0 auto;
+    width:180px;
+    border-radius:15px;
+    text-align:center;
+    overflow:hidden;
+    box-shadow:0 4px 15px rgba(0,0,0,0.1);
+    scroll-snap-align:start;
+    transition:transform 0.2s;
+    background:#fff;
+}
+.hairstyle-card img {
+    display:block;
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+.hairstyle-info {
+    padding:10px;
+}
+.hairstyle-info .name,
+.hairstyle-info .price {
+    font-size:0.95rem;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    margin:4px 0;
+}
+.hairstyle-card:hover {
+    transform:translateY(-3px);
+}
 
 /* Stylist grid */
 .stylist-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:20px; }
@@ -184,7 +231,10 @@ body { font-family: 'Mulish', sans-serif; background:#fff5f8; color:#333; }
     font-weight: bold;
     transition: all 0.3s;
 }
-.edit-profile-btn:hover { background: linear-gradient(90deg, #5c7bd6, #243465); transform:translateY(-2px); }
+.edit-profile-btn:hover { 
+    background: linear-gradient(90deg, #5c7bd6, #243465); 
+    transform:translateY(-2px); 
+}
 
 /* Hover effect for icons */
 .salon-info i:hover {
