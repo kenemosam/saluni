@@ -137,7 +137,7 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     messages.success(request, "Umetoka kwenye akaunti yako.")
-    return redirect('saluni_kike/salon_list')
+    return redirect('login')
 
 def booking_detail(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
