@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section class="login-section">
+    <div class="container">
+        <div class="login-card">
+            <h2>Ingia kwenye Akaunti Yako</h2>
+
+            {% if form.errors %}
+            <div class="error-message">
+                Tafadhali hakikisha umejaza taarifa zako kwa usahihi.
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_username">Jina la Mtumiaji</label>
+                    <input type="text" name="username" id="id_username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password">Neno la Siri</label>
+                    <input type="password" name="password" id="id_password" required>
+                </div>
+
+                <button type="submit" class="login-btn">Ingia</button>
+            </form>
+
+            <p class="register-link">
+                Hakuna akaunti? <a href="{% url 'salon_register' %}">Jisajili hapa</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+<style>
+body { font-family: 'Poppins', sans-serif; background:#fff5f8; color:#333; }
+.container { max-width:400px; margin:50px auto; padding:20px; }
+
+.login-card { background:#fff; padding:30px; border-radius:15px; box-shadow:0 8px 25px rgba(0,0,0,0.12); }
+.login-card h2 { font-size:1.5rem; margin-bottom:20px; color:#4b6cb7; text-align:center; }
+
+.form-group { margin-bottom:15px; }
+label { display:block; font-weight:600; margin-bottom:5px; }
+input { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; font-size:0.95rem; }
+
+.login-btn { width:100%; padding:12px; background:#4b6cb7; color:white; font-weight:bold; border:none; border-radius:10px; cursor:pointer; margin-top:10px; }
+.login-btn:hover { background:#3f51b5; }
+
+.error-message { color:#c2185b; margin-bottom:15px; font-weight:600; text-align:center; }
+.register-link { text-align:center; margin-top:15px; }
+.register-link a { color:#4b6cb7; text-decoration:none; font-weight:600; }
+.register-link a:hover { text-decoration:underline; }
+</style>
+{% endblock %}

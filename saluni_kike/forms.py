@@ -33,7 +33,6 @@ class SalonProfileForm(forms.ModelForm):
 
 ################################################################################
 
-# bookings/forms.py
 from django import forms
 from .models import Booking
 
@@ -47,13 +46,16 @@ class BookingForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        salon = kwargs.pop('salon', None)  # pop the salon instance
+        salon = kwargs.pop('salon', None)
         super().__init__(*args, **kwargs)
 
         if salon:
-            # Filter only services/stylists of this salon
             self.fields['service'].queryset = salon.services.all()
             self.fields['stylist'].queryset = salon.stylists.all()
+            self.fields['stylist'].required = False  # optional
         else:
             self.fields['service'].queryset = Booking.objects.none()
             self.fields['stylist'].queryset = Booking.objects.none()
+
+        # Ensure proper datetime parsing for browser input
+        self.fields['start_datetime'].input_formats = ['%Y-%m-%dT%H:%M']

@@ -109,3 +109,34 @@ def create_booking(request, salon_id):
         'salon': salon,
         'form': form,
     })
+
+##########################################################################################
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+
+def user_login(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, f"Karibu, {user.username}!")
+            # Redirect to next page if present
+            next_url = request.GET.get('next') or 'salon_list'
+            return redirect(next_url)
+        else:
+            messages.error(request, "Jina la mtumiaji au nenosiri si sahihi.")
+    
+    return render(request, 'saluni_kike/login.html')
+
+
+def user_logout(request):
+    logout(request)
+    messages.success(request, "Umetoka kwenye akaunti yako.")
+    return redirect('saluni_kike/salon_list')
+
