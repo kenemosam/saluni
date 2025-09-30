@@ -88,27 +88,26 @@ from .models import Booking, Salon, Customer
 
 @login_required
 def create_booking(request, salon_id):
-    # Fetch the salon and logged-in customer
     salon = get_object_or_404(Salon, id=salon_id)
-    customer = get_object_or_404(Customer, user=request.user)
+    customer = request.user  # already a Customer instance
 
     if request.method == "POST":
-        form = BookingForm(request.POST, salon=salon)  # pass salon to form
+        form = BookingForm(request.POST, salon=salon)
         if form.is_valid():
             booking = form.save(commit=False)
             booking.salon = salon
             booking.customer = customer
             booking.status = 'pending'
             booking.save()
-            # Redirect to booking detail or salon page
             return redirect('booking_detail', booking_id=booking.id)
     else:
-        form = BookingForm(salon=salon)  # pass salon for GET request
+        form = BookingForm(salon=salon)
 
-    return render(request, 'bookings/create_booking.html', {
+    return render(request, 'saluni_kike/create_booking.html', {
         'salon': salon,
         'form': form,
     })
+
 
 ##########################################################################################
 
@@ -139,4 +138,9 @@ def user_logout(request):
     logout(request)
     messages.success(request, "Umetoka kwenye akaunti yako.")
     return redirect('saluni_kike/salon_list')
+
+def booking_detail(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    return render(request, 'saluni_kike/booking_detail.html', {'booking': booking})
+
 
