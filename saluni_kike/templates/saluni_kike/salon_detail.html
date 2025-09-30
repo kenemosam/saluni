@@ -61,6 +61,11 @@
                 </p>
                 {% endif %}
 
+                <!-- Weka Booking Button -->
+                <a href="{% url 'create_booking' salon.id %}" class="weka-booking-btn">
+                    <i class="ph ph-calendar-plus" style="margin-right:6px;"></i> Weka Booking
+                </a>
+
                 <a href="{% url 'salon_update_profile' salon.id %}" class="edit-profile-btn">
                     <i class="ph ph-pencil-line" style="margin-right:6px;"></i> Edit Profile
                 </a>
@@ -147,6 +152,24 @@ body { font-family: 'Poppins', sans-serif; background:#fff5f8; color:#333; }
 .salon-info { flex:1; min-width:250px; }
 .salon-info h1 { font-size:2rem; color:#182848; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
 .salon-info p { font-size:0.95rem; margin:5px 0; display:flex; align-items:center; gap:5px; }
+
+/* Weka Booking Button */
+.weka-booking-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: #4caf50;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: all 0.3s;
+}
+.weka-booking-btn:hover {
+    background: #43a047;
+    transform: translateY(-2px);
+}
 
 /* Sections */
 .salon-description, .salon-stylists, .salon-reviews {

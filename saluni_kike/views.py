@@ -78,4 +78,34 @@ def salon_update_profile(request, salon_id):
     return render(request, 'saluni_kike/update_profile.html', {'form': form})
 
 
+########################################################################################
 
+# bookings/views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import BookingForm
+from .models import Booking, Salon, Customer
+
+@login_required
+def create_booking(request, salon_id):
+    # Fetch the salon and logged-in customer
+    salon = get_object_or_404(Salon, id=salon_id)
+    customer = get_object_or_404(Customer, user=request.user)
+
+    if request.method == "POST":
+        form = BookingForm(request.POST, salon=salon)  # pass salon to form
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.salon = salon
+            booking.customer = customer
+            booking.status = 'pending'
+            booking.save()
+            # Redirect to booking detail or salon page
+            return redirect('booking_detail', booking_id=booking.id)
+    else:
+        form = BookingForm(salon=salon)  # pass salon for GET request
+
+    return render(request, 'bookings/create_booking.html', {
+        'salon': salon,
+        'form': form,
+    })
