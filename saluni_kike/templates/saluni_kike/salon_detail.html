@@ -162,7 +162,7 @@ body { font-family: 'Poppins', sans-serif; background:#fff5f8; color:#333; }
 .edit-profile-btn:hover { background: linear-gradient(90deg, #5c7bd6, #243465); transform:translateY(-2px); }
 
 /* Sections */
-.salon-description, .salon-stylists, .salon-reviews {
+.salon-description, .salon-reviews {
     margin-bottom:30px; padding:20px; background:#fff; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.08);
 }
 .salon-description h2,
@@ -179,13 +179,23 @@ body { font-family: 'Poppins', sans-serif; background:#fff5f8; color:#333; }
 .hairstyle-info .name, .hairstyle-info .price { font-size:0.95rem; font-weight:600; margin:4px 0; display:flex; align-items:center; justify-content:center; gap:5px; }
 .hairstyle-card:hover { transform:translateY(-3px); }
 
-/* Stylists as Circles */
+/* Stylists as Circles (navbar gradient accent) */
 .stylist-carousel { display:flex; gap:20px; overflow-x:auto; padding-bottom:10px; scroll-snap-type:x mandatory; }
 .stylist-circle { flex:0 0 auto; text-align:center; scroll-snap-align:start; transition:transform 0.2s; }
-.stylist-circle img { width:120px; height:120px; object-fit:cover; border-radius:50%; border:4px solid #ff4fa1; box-shadow:0 4px 10px rgba(0,0,0,0.15); transition: transform 0.2s, box-shadow 0.2s; }
+.stylist-circle img { 
+    width:120px; 
+    height:120px; 
+    object-fit:cover; 
+    border-radius:50%; 
+    padding:4px; 
+    background: linear-gradient(90deg, #4b6cb7, #182848);
+    transition: transform 0.2s; 
+    -webkit-mask: radial-gradient(circle, rgba(0,0,0,1) calc(100% - 4px), rgba(0,0,0,0) 100%) center/100% 100% no-repeat;
+    mask: radial-gradient(circle, rgba(0,0,0,1) calc(100% - 4px), rgba(0,0,0,0) 100%) center/100% 100% no-repeat;
+}
 .stylist-circle h4 { margin-top:10px; font-size:0.95rem; color:#333; }
 .stylist-circle .specialties { font-size:0.8rem; color:#777; margin-top:2px; }
-.stylist-circle:hover img { transform: scale(1.05); box-shadow:0 6px 15px rgba(0,0,0,0.2); }
+.stylist-circle:hover img { transform: scale(1.05); }
 
 /* Reviews */
 .review-card { background:#fafafa; padding:15px; border-radius:15px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:15px; }
