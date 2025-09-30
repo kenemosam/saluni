@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ salon.name }} Stylists</h1>
+
+<div style="display:flex; flex-wrap:wrap; gap:20px;">
+  {% for stylist in stylists %}
+    <div style="width:200px; padding:15px; border:1px solid #eee; border-radius:8px; text-align:center;">
+      {% if stylist.photo_url %}
+        <img src="{{ stylist.photo_url }}" alt="{{ stylist.name }}" style="width:100px; height:100px; border-radius:50%; object-fit:cover;">
+      {% else %}
+        <div style="width:100px; height:100px; border-radius:50%; background:#ccc; display:flex; align-items:center; justify-content:center;">N/A</div>
+      {% endif %}
+      <h3>{{ stylist.name }}</h3>
+      {% if stylist.specialties %}
+        <p style="font-size:0.85em; color:#555;">{{ stylist.specialties|join:", " }}</p>
+      {% endif %}
+      {% if stylist.bio %}
+        <p style="font-size:0.8em; color:#777;">{{ stylist.bio|truncatewords:15 }}</p>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p>No stylists found for this salon.</p>
+  {% endfor %}
+</div>
+{% endblock %}

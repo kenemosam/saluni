@@ -144,3 +144,19 @@ def booking_detail(request, booking_id):
     return render(request, 'saluni_kike/booking_detail.html', {'booking': booking})
 
 
+# views.py
+from django.shortcuts import render, get_object_or_404
+from .models import Salon, Stylist
+
+def salon_stylists(request, salon_id):
+    salon = get_object_or_404(Salon, id=salon_id)
+    # Only active stylists
+    stylists = salon.stylists.filter(is_active=True)
+    context = {
+        'salon': salon,
+        'stylists': stylists
+    }
+    return render(request, 'salon_stylists.html', context)
+
+
+

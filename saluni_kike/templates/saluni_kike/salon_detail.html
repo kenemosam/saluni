@@ -10,6 +10,7 @@
 {% block content %}
 <section class="salon-detail-section">
     <div class="container">
+        <!-- Salon Header -->
         <div class="salon-header">
             <div class="salon-image">
                 {% if salon.picha_kuu %}
@@ -61,17 +62,17 @@
                 </p>
                 {% endif %}
 
-                <!-- Weka Booking Button -->
+                <!-- Buttons -->
                 <a href="{% url 'create_booking' salon.id %}" class="weka-booking-btn">
                     <i class="ph ph-calendar-plus" style="margin-right:6px;"></i> Weka Booking
                 </a>
-
                 <a href="{% url 'salon_update_profile' salon.id %}" class="edit-profile-btn">
                     <i class="ph ph-pencil-line" style="margin-right:6px;"></i> Edit Profile
                 </a>
             </div>
         </div>
 
+        <!-- Salon Description -->
         {% if salon.description %}
         <div class="salon-description">
             <h2><i class="ph ph-info" style="color:#c2185b;"></i> Maelezo ya Salon</h2>
@@ -79,6 +80,7 @@
         </div>
         {% endif %}
 
+        <!-- Services -->
         {% if salon.services.all %}
         <div class="salon-services">
             <h2><i class="ph ph-list-bullets" style="color:#c2185b;"></i> Huduma Zilizopo</h2>
@@ -91,12 +93,8 @@
                         <img src="https://picsum.photos/200/200?random={{ forloop.counter }}" alt="{{ service.name }}">
                     {% endif %}
                     <div class="hairstyle-info">
-                        <p class="name">
-                            <i class="ph ph-scissors"></i> {{ service.name }}
-                        </p>
-                        <p class="price">
-                            <i class="ph ph-currency-circle-dollar"></i> TSh {{ service.price|floatformat:0 }}
-                        </p>
+                        <p class="name"><i class="ph ph-scissors"></i> {{ service.name }}</p>
+                        <p class="price"><i class="ph ph-currency-circle-dollar"></i> TSh {{ service.price|floatformat:0 }}</p>
                     </div>
                 </div>
                 {% endfor %}
@@ -104,22 +102,21 @@
         </div>
         {% endif %}
 
+        <!-- Stylists as Circular Carousel -->
         {% if salon.stylists.all %}
         <div class="salon-stylists">
-            <h2><i class="ph ph-users-three" style="color:#c2185b;"></i> Stylists</h2>
-            <div class="stylist-grid">
+            <h2><i class="ph ph-users-three" style="color:#c2185b;"></i> Wasusi</h2>
+            <div class="stylist-carousel">
                 {% for stylist in salon.stylists.all %}
-                <div class="stylist-card">
-                    <div class="stylist-photo">
-                        {% if stylist.photo %}
-                            <img src="{{ stylist.photo }}" alt="{{ stylist.name }}">
-                        {% else %}
-                            <img src="https://picsum.photos/200/200?random={{ forloop.counter }}" alt="{{ stylist.name }}">
-                        {% endif %}
-                    </div>
-                    <h3>{{ stylist.name }}</h3>
+                <div class="stylist-circle">
+                    {% if stylist.photo_url %}
+                        <img src="{{ stylist.photo_url }}" alt="{{ stylist.name }}">
+                    {% else %}
+                        <img src="https://picsum.photos/200/200?random={{ forloop.counter }}" alt="{{ stylist.name }}">
+                    {% endif %}
+                    <h4>{{ stylist.name }}</h4>
                     {% if stylist.specialties %}
-                    <p>{{ stylist.specialties }}</p>
+                        <p class="specialties">{{ stylist.specialties|join:", "|truncatechars:30 }}</p>
                     {% endif %}
                 </div>
                 {% endfor %}
@@ -127,6 +124,7 @@
         </div>
         {% endif %}
 
+        <!-- Reviews -->
         {% if salon.reviews.all %}
         <div class="salon-reviews">
             <h2><i class="ph ph-star" style="color:#c2185b;"></i> Reviews</h2>
@@ -142,6 +140,7 @@
     </div>
 </section>
 
+<!-- Styles -->
 <style>
 body { font-family: 'Poppins', sans-serif; background:#fff5f8; color:#333; }
 .container { max-width:1200px; margin:0 auto; padding:20px; }
@@ -153,116 +152,46 @@ body { font-family: 'Poppins', sans-serif; background:#fff5f8; color:#333; }
 .salon-info h1 { font-size:2rem; color:#182848; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
 .salon-info p { font-size:0.95rem; margin:5px 0; display:flex; align-items:center; gap:5px; }
 
-/* Weka Booking Button */
-.weka-booking-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 10px 20px;
-    background: #4caf50;
-    color: white;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-    margin-top: 15px;
-    transition: all 0.3s;
+/* Buttons */
+.weka-booking-btn, .edit-profile-btn {
+    display: inline-flex; align-items:center; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:bold; margin-top:15px; transition:all 0.3s;
 }
-.weka-booking-btn:hover {
-    background: #43a047;
-    transform: translateY(-2px);
-}
+.weka-booking-btn { background:#4caf50; color:#fff; }
+.weka-booking-btn:hover { background:#43a047; transform:translateY(-2px); }
+.edit-profile-btn { background: linear-gradient(90deg, #4b6cb7, #182848); color:#fff; }
+.edit-profile-btn:hover { background: linear-gradient(90deg, #5c7bd6, #243465); transform:translateY(-2px); }
 
 /* Sections */
 .salon-description, .salon-stylists, .salon-reviews {
-    margin-bottom:30px; padding:20px; background:#fff; border-radius:15px; 
-    box-shadow:0 6px 15px rgba(0,0,0,0.08);
+    margin-bottom:30px; padding:20px; background:#fff; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.08);
 }
 .salon-description h2,
 .salon-services h2,
 .salon-stylists h2,
-.salon-reviews h2 { 
-    font-size:1.5rem; color:#4b6cb7; margin-bottom:15px; display:flex; align-items:center; gap:8px;
-}
+.salon-reviews h2 { font-size:1.5rem; color:#4b6cb7; margin-bottom:15px; display:flex; align-items:center; gap:8px; }
 
-/* Make Huduma container transparent */
-.salon-services {
-    background: transparent !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-}
+/* Hairstyles Scroll */
+.salon-services { background:transparent !important; box-shadow:none !important; padding:0 !important; }
+.hairstyles-scroll { display:flex; overflow-x:auto; gap:15px; padding-bottom:10px; scroll-snap-type:x mandatory; }
+.hairstyle-card { flex:0 0 auto; width:180px; border-radius:15px; text-align:center; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.1); scroll-snap-align:start; transition:transform 0.2s; background:#fff; }
+.hairstyle-card img { width:100%; height:180px; object-fit:cover; }
+.hairstyle-info { padding:10px; }
+.hairstyle-info .name, .hairstyle-info .price { font-size:0.95rem; font-weight:600; margin:4px 0; display:flex; align-items:center; justify-content:center; gap:5px; }
+.hairstyle-card:hover { transform:translateY(-3px); }
 
-/* Hairstyles horizontal scroll */
-.hairstyles-scroll {
-    display:flex;
-    overflow-x:auto;
-    gap:15px;
-    padding-bottom:10px;
-    scroll-snap-type:x mandatory;
-}
-.hairstyle-card {
-    flex:0 0 auto;
-    width:180px;
-    border-radius:15px;
-    text-align:center;
-    overflow:hidden;
-    box-shadow:0 4px 15px rgba(0,0,0,0.1);
-    scroll-snap-align:start;
-    transition:transform 0.2s;
-    background:#fff;
-}
-.hairstyle-card img {
-    display:block;
-    width:100%;
-    height:180px;
-    object-fit:cover;
-}
-.hairstyle-info {
-    padding:10px;
-}
-.hairstyle-info .name,
-.hairstyle-info .price {
-    font-size:0.95rem;
-    font-weight:600;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:5px;
-    margin:4px 0;
-}
-.hairstyle-card:hover {
-    transform:translateY(-3px);
-}
-
-/* Stylist grid */
-.stylist-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:20px; }
-.stylist-card { background:#fff; border-radius:15px; box-shadow:0 8px 25px rgba(0,0,0,0.12); overflow:hidden; text-align:center; padding:15px; }
-.stylist-card img { width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:10px; }
+/* Stylists as Circles */
+.stylist-carousel { display:flex; gap:20px; overflow-x:auto; padding-bottom:10px; scroll-snap-type:x mandatory; }
+.stylist-circle { flex:0 0 auto; text-align:center; scroll-snap-align:start; transition:transform 0.2s; }
+.stylist-circle img { width:120px; height:120px; object-fit:cover; border-radius:50%; border:4px solid #ff4fa1; box-shadow:0 4px 10px rgba(0,0,0,0.15); transition: transform 0.2s, box-shadow 0.2s; }
+.stylist-circle h4 { margin-top:10px; font-size:0.95rem; color:#333; }
+.stylist-circle .specialties { font-size:0.8rem; color:#777; margin-top:2px; }
+.stylist-circle:hover img { transform: scale(1.05); box-shadow:0 6px 15px rgba(0,0,0,0.2); }
 
 /* Reviews */
 .review-card { background:#fafafa; padding:15px; border-radius:15px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:15px; }
 .review-card p { margin:5px 0; }
 
-/* Edit profile button */
-.edit-profile-btn {
-    display: inline-flex;
-    align-items:center;
-    padding: 10px 20px;
-    background: linear-gradient(90deg, #4b6cb7, #182848);
-    color: white;
-    border-radius: 10px;
-    text-decoration: none;
-    margin-top: 15px;
-    font-weight: bold;
-    transition: all 0.3s;
-}
-.edit-profile-btn:hover { 
-    background: linear-gradient(90deg, #5c7bd6, #243465); 
-    transform:translateY(-2px); 
-}
-
 /* Hover effect for icons */
-.salon-info i:hover {
-    transform: scale(1.2);
-    transition: transform 0.2s;
-}
+.salon-info i:hover { transform: scale(1.2); transition: transform 0.2s; }
 </style>
 {% endblock %}

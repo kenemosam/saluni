@@ -12,6 +12,7 @@ urlpatterns = [
     path('<int:booking_id>/', views.booking_detail, name='booking_detail'),
     path('salon/register/', views.salon_register, name='salon_register'),
     path('salon/<int:salon_id>/update/', views.salon_update_profile, name='salon_update_profile'),
+    path('salon/<int:salon_id>/stylists/', views.salon_stylists, name='salon_stylists'),
 
     # Login & Logout
     path('accounts/login/', views.user_login, name='login'),

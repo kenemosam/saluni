@@ -81,19 +81,23 @@ class Service(models.Model):
         return f"{self.name} — {self.salon.name}"
 
 
+from django.db import models
+
 class Stylist(models.Model):
     salon = models.ForeignKey(Salon, related_name='stylists', on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
     bio = models.TextField(blank=True)
-    specialties = models.CharField(max_length=300, blank=True)  # comma-separated or JSON
+    specialties = models.JSONField(blank=True, null=True, default=list)  # store as list of strings
     is_active = models.BooleanField(default=True)
-    photo = models.URLField(blank=True, null=True)
+    photo_url = models.URLField(blank=True, null=True)  # external image URL
 
     class Meta:
         ordering = ['salon', 'name']
 
     def __str__(self):
         return f"{self.name} ({self.salon.name})"
+
+
 
 
 class AvailabilitySlot(models.Model):
