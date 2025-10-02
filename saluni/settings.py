@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'saluni_kike',
     'saluni_kiume',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
