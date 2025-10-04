@@ -13,7 +13,7 @@
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family: 'Mulish', sans-serif; background:#f9f9f9; color:#333; }
 
-        /* Header */
+        /* Header & Navbar */
         header { 
             background: linear-gradient(90deg, #4b6cb7, #182848);
             padding:15px 20px; 
@@ -24,17 +24,43 @@
         }
         header h1 { font-size:1.5rem; color:#fff; }
 
-        /* Nav */
-        nav { display:flex; gap:15px; align-items:center; flex-wrap:wrap; }
+        nav { 
+            display:flex; 
+            gap:15px; 
+            align-items:center; 
+            flex-wrap:wrap; 
+        }
         nav a { 
-            color:#fff; text-decoration:none; 
-            padding:8px 12px; border-radius:8px; 
-            transition:0.3s; display:flex; align-items:center; gap:6px;
+            color:#fff; 
+            text-decoration:none; 
+            padding:8px 12px; 
+            border-radius:8px; 
+            transition:0.3s; 
+            display:flex; 
+            align-items:center; 
+            gap:6px;
         }
         nav a:hover { background: rgba(255,255,255,0.2); }
 
+        /* Hamburger */
+        .hamburger { display:none; flex-direction:column; cursor:pointer; gap:4px; }
+        .hamburger div { width:25px; height:3px; background:#fff; }
+
+        @media(max-width:768px){
+            nav { 
+                display:none; 
+                flex-direction:column; 
+                width:100%; 
+                margin-top:10px; 
+                align-items:flex-end; /* Right align links */
+            }
+            nav.show { display:flex; }
+            nav.show a { justify-content:flex-end; } /* Align links content to right */
+            .hamburger { display:flex; }
+        }
+
         /* Hero */
-        .hero { text-align:center; padding:50px 20px; background:#f9f9f9; }
+        .hero { text-align:left; padding:50px 20px; background:#f9f9f9; }
         .hero h2 { font-size:2rem; color:#182848; margin-bottom:10px; }
         .hero p { font-size:1.1rem; color:#555; }
 
@@ -48,30 +74,32 @@
             margin:0 auto; 
         }
         .card { 
-            background:#fff; border-radius:12px; 
-            padding:25px; text-align:center; 
+            background:#fff; 
+            border-radius:12px; 
+            padding:25px; 
+            text-align:center; /* Center the card content */
             box-shadow:0 4px 12px rgba(0,0,0,0.08); 
             transition:0.3s;
         }
-        .card:hover { transform:translateY(-5px); box-shadow:0 6px 16px rgba(0,0,0,0.12); }
+        .card:hover { 
+            transform:translateY(-5px); 
+            box-shadow:0 6px 16px rgba(0,0,0,0.12); 
+        }
         .card i { font-size:3rem; margin-bottom:15px; }
         .card h3 { font-size:1.3rem; color:#182848; margin-bottom:8px; }
         .card p { font-size:0.95rem; color:#555; margin-bottom:15px; }
         .btn { 
-            display:inline-block; padding:10px 18px; 
-            border-radius:8px; color:#fff; text-decoration:none; 
+            display:inline-block; 
+            padding:10px 18px; 
+            border-radius:8px; 
+            color:#fff; 
+            text-decoration:none; 
             transition:0.3s;
         }
         .btn:hover { opacity:0.9; }
 
         /* Footer */
-        footer { 
-            background:#182848; 
-            color:#fff; 
-            text-align:center; 
-            padding:15px 0; 
-            margin-top:40px; 
-        }
+        footer { background:#182848; color:#fff; text-align:center; padding:15px 0; margin-top:40px; }
     </style>
 </head>
 <body>
@@ -79,8 +107,17 @@
     <!-- Header -->
     <header>
         <h1>Saluni Kiganjani</h1>
-        <nav>
-            <a href="#"><i class="ph ph-house"></i> Nyumbani</a>
+
+        <!-- Hamburger for mobile -->
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <!-- Navbar -->
+        <nav id="navbar">
+            <a href="/"><i class="ph ph-house"></i> Nyumbani</a>
             <a href="/salons/"><i class="ph ph-hair-dryer"></i> Saluni za Kike</a>
             <a href="/saloni-kiume/"><i class="ph ph-scissors"></i> Saluni za Kiume</a>
             <a href="/vipodozi/"><i class="ph ph-shopping-bag"></i> Vipodozi</a>
@@ -96,23 +133,20 @@
 
     <!-- Services Section -->
     <section class="services">
-        <!-- Saluni za Kiume -->
         <div class="card">
             <i class="ph ph-scissors" style="color:#4b6cb7;"></i>
             <h3>Saluni za Kiume</h3>
             <p>Huduma bora za nywele na ndevu kwa wanaume.</p>
-            <a href="/saloni-kiume/" class="btn" style="background:#4b6cb7;">Weka Nafasi</a>
+            <a href="/saloni-kiume/" class="btn" style="background:#4b6cb7;">Angalia Zote</a>
         </div>
 
-        <!-- Saluni za Kike -->
         <div class="card">
             <i class="ph ph-hair-dryer" style="color:#e75480;"></i>
             <h3>Saluni za Kike</h3>
             <p>Huduma za nywele, makeup, spa na urembo.</p>
-            <a href="/saloni-kike/" class="btn" style="background:#e75480;">Weka Nafasi</a>
+            <a href="/salons/" class="btn" style="background:#e75480;">Angalia Zote</a>
         </div>
 
-        <!-- Duka la Vipodozi -->
         <div class="card">
             <i class="ph ph-shopping-bag" style="color:#d4a017;"></i>
             <h3>Duka la Vipodozi</h3>
@@ -125,6 +159,14 @@
     <footer>
         &copy; 2025 Saluni Kiganjani. Haki zote zimehifadhiwa.
     </footer>
+
+    <script>
+        // Toggle mobile menu
+        function toggleMenu() {
+            const nav = document.getElementById('navbar');
+            nav.classList.toggle('show');
+        }
+    </script>
 
 </body>
 </html>
