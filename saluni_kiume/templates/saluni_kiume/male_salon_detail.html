@@ -1,0 +1,24 @@
+<h1>{{ salon.name }}</h1>
+<p>{{ salon.description }}</p>
+<p>{{ salon.address }}, {{ salon.region }}, {{ salon.district }}</p>
+<p>Phone: {{ salon.phone }}</p>
+
+<h2>Services</h2>
+<ul>
+{% for service in services %}
+    <li>{{ service.name }} — {{ service.price }} KES ({{ service.duration_minutes }} mins)</li>
+{% empty %}
+    <li>No services available</li>
+{% endfor %}
+</ul>
+
+<h2>Stylists</h2>
+<ul>
+{% for stylist in stylists %}
+    <li>{{ stylist.name }}</li>
+{% empty %}
+    <li>No stylists available</li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'kiume:create_male_booking' salon.id %}">Book a Service</a>

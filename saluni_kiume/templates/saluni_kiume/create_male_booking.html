@@ -1,0 +1,22 @@
+<h1>Book a service at {{ salon.name }}</h1>
+<form method="POST">
+    {% csrf_token %}
+    <label>Service:</label>
+    <select name="service">
+        {% for s in services %}
+        <option value="{{ s.id }}">{{ s.name }} — {{ s.price }} KES</option>
+        {% endfor %}
+    </select>
+
+    <label>Stylist:</label>
+    <select name="stylist">
+        {% for st in stylists %}
+        <option value="{{ st.id }}">{{ st.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Start Date & Time:</label>
+    <input type="datetime-local" name="start_datetime" required>
+
+    <button type="submit">Book</button>
+</form>

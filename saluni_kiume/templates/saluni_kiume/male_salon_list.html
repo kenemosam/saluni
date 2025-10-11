@@ -1,0 +1,11 @@
+<h1>Male Salons</h1>
+<ul>
+{% for salon in salons %}
+    <li>
+        <a href="{% url 'kiume:male_salon_detail' salon.id %}">{{ salon.name }}</a>
+        - {{ salon.address }}
+    </li>
+{% empty %}
+    <li>No male salons found.</li>
+{% endfor %}
+</ul>
