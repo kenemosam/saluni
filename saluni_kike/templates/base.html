@@ -76,15 +76,15 @@
 
         <nav id="navbar">
             <a href="/"><i class="ph ph-house"></i> Nyumbani</a>
-            <a href="/salons/"><i class="ph ph-hair-dryer"></i> Saluni za Kike</a>
+            <a href="/kike/salons/"><i class="ph ph-hair-dryer"></i> Saluni za Kike</a>
             <a href="/saloni-kiume/"><i class="ph ph-scissors"></i> Saluni za Kiume</a>
             <a href="/vipodozi/"><i class="ph ph-shopping-bag"></i> Vipodozi</a>
             <a href="/salon/register/"><i class="ph ph-note-pencil"></i> Sajili Saluni</a>
 
             {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}" class="btn-auth"><i class="ph ph-sign-out"></i> Logout</a>
+                <a href="{% url 'kike:logout' %}" class="btn-auth"><i class="ph ph-sign-out"></i> Logout</a>
             {% else %}
-                <a href="{% url 'login' %}" class="btn-auth"><i class="ph ph-sign-in"></i> Login</a>
+                <a href="{% url 'kike:login' %}" class="btn-auth"><i class="ph ph-sign-in"></i> Login</a>
             {% endif %}
         </nav>
     </header>

@@ -32,7 +32,7 @@
             <div class="salon-info">
                 <p class="address"><i class="ph ph-map-pin"></i> {{ salon.street }}, {{ salon.region }}</p>
             </div>
-            <a href="{% url 'salon_detail' salon.id %}" class="btn-check">Angalia</a>
+            <a href="{% url 'kike:salon_detail' salon.id %}" class="btn-check">Angalia</a>
         </div>
         {% empty %}
         <div class="no-results">

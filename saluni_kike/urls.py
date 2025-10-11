@@ -1,7 +1,9 @@
-# saluni_kike/urls.py
+# kike/urls.py
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+
+app_name = 'kike'  
 
 urlpatterns = [
     path('salons/', views.salon_list, name='salon_list'),
