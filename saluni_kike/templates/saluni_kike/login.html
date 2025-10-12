@@ -10,22 +10,22 @@
         <div class="login-card">
             <h2>Ingia kwenye Akaunti Yako</h2>
 
-            {% if form.errors %}
-            <div class="error-message">
-                Tafadhali hakikisha umejaza taarifa zako kwa usahihi.
-            </div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="error-message">{{ message }}</div>
+                {% endfor %}
             {% endif %}
 
             <form method="post">
                 {% csrf_token %}
 
                 <div class="form-group">
-                    <label for="id_username">Jina la Mtumiaji</label>
-                    <input type="text" name="username" id="id_username" required>
+                    <label for="id_phone">Nambari ya Simu</label>
+                    <input type="text" name="phone" id="id_phone" placeholder="+255700123456" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="id_password">Neno la Siri</label>
+                    <label for="id_password">Nenosiri</label>
                     <input type="password" name="password" id="id_password" required>
                 </div>
 
@@ -33,7 +33,7 @@
             </form>
 
             <p class="register-link">
-                Hakuna akaunti? <a href="{% url 'salon_register' %}">Jisajili hapa</a>
+                Hakuna akaunti? <a href="{% url 'kike:salon_register' %}">Jisajili hapa</a>
             </p>
         </div>
     </div>

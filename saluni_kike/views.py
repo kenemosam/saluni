@@ -38,7 +38,7 @@ def salon_register(request):
         form = SalonForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('salon_list')
+            return redirect('kike:salon_list')
     else:
         form = SalonForm()
     return render(request, 'saluni_kike/salon_register.html', {'form': form})
@@ -115,22 +115,24 @@ def booking_detail(request, booking_id):
 
 def user_login(request):
     if request.method == "POST":
-        username = request.POST.get('username')
+        phone = request.POST.get('phone')
         password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
+        # Pass 'username=phone' because backend uses it
+        user = authenticate(request, username=phone, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, f"Karibu, {user.username}!")
-            next_url = request.GET.get('next') or 'salon_list'
+            messages.success(request, f"Karibu, {user.get_full_name() or user.phone}!")
+            next_url = request.GET.get('next') or 'kike:salon_list'
             return redirect(next_url)
         else:
-            messages.error(request, "Jina la mtumiaji au nenosiri si sahihi.")
+            messages.error(request, "Nambari ya simu au nenosiri si sahihi.")
 
     return render(request, 'saluni_kike/login.html')
+
 
 
 def user_logout(request):
     logout(request)
     messages.success(request, "Umetoka kwenye akaunti yako.")
-    return redirect('login')
+    return redirect('kike:login')
