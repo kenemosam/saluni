@@ -1,49 +1,34 @@
-# saluni_kiume/models.py
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinValueValidator, RegexValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.utils import timezone
+from django.conf import settings  # Use custom user model
 
+# ---------------------------
+# Phone validator
+# ---------------------------
 PHONE_REGEX = RegexValidator(
     regex=r'^\+?[0-9]{9,15}$',
     message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
 )
 
-# -----------------------------------
-# Customer model (same as female)
-# -----------------------------------
-class Customer(AbstractUser):
-    phone = models.CharField(validators=[PHONE_REGEX], max_length=16, blank=True, null=True)
-    is_phone_verified = models.BooleanField(default=False)
-    profile_image = models.URLField(blank=True, null=True)
-
-    def __str__(self):
-        return self.get_full_name() or self.username
-
-# -----------------------------------
+# ---------------------------
 # Male Salon
-# -----------------------------------
+# ---------------------------
 class MaleSalon(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     address = models.CharField(max_length=300)
-
     region = models.CharField(max_length=100)
     district = models.CharField(max_length=100)
     street = models.CharField(max_length=200)
-
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-
     phone = models.CharField(validators=[PHONE_REGEX], max_length=16, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     website = models.URLField(blank=True, null=True)
-
     facebook = models.URLField(blank=True, null=True)
     instagram = models.URLField(blank=True, null=True)
-
     opening_hours = models.JSONField(blank=True, null=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -56,9 +41,9 @@ class MaleSalon(models.Model):
     def average_rating(self):
         return self.reviews.aggregate(models.Avg('rating'))['rating__avg']
 
-# -----------------------------------
-# Male Services
-# -----------------------------------
+# ---------------------------
+# Male Service
+# ---------------------------
 class MaleService(models.Model):
     salon = models.ForeignKey(MaleSalon, related_name='services', on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
@@ -74,9 +59,9 @@ class MaleService(models.Model):
     def __str__(self):
         return f"{self.name} — {self.salon.name}"
 
-# -----------------------------------
-# Male Stylists
-# -----------------------------------
+# ---------------------------
+# Male Stylist
+# ---------------------------
 class MaleStylist(models.Model):
     salon = models.ForeignKey(MaleSalon, related_name='stylists', on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
@@ -91,9 +76,9 @@ class MaleStylist(models.Model):
     def __str__(self):
         return f"{self.name} ({self.salon.name})"
 
-# -----------------------------------
-# Male Availability Slots
-# -----------------------------------
+# ---------------------------
+# Male Availability Slot
+# ---------------------------
 class MaleAvailabilitySlot(models.Model):
     stylist = models.ForeignKey(MaleStylist, related_name='availability', on_delete=models.CASCADE)
     start = models.DateTimeField()
@@ -111,9 +96,9 @@ class MaleAvailabilitySlot(models.Model):
     def __str__(self):
         return f"{self.stylist.name}: {self.start.isoformat()} -> {self.end.isoformat()}"
 
-# -----------------------------------
+# ---------------------------
 # Male Booking
-# -----------------------------------
+# ---------------------------
 class MaleBooking(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
@@ -123,20 +108,22 @@ class MaleBooking(models.Model):
         ('no_show', 'No-show'),
     ]
 
-    customer = models.ForeignKey(Customer, related_name='male_bookings', on_delete=models.CASCADE)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='male_bookings', on_delete=models.CASCADE)
     salon = models.ForeignKey(MaleSalon, related_name='bookings', on_delete=models.CASCADE)
     service = models.ForeignKey(MaleService, related_name='bookings', on_delete=models.CASCADE)
     stylist = models.ForeignKey(MaleStylist, related_name='bookings', on_delete=models.SET_NULL, null=True, blank=True)
     start_datetime = models.DateTimeField()
-    end_datetime = models.DateTimeField()
+    end_datetime = models.DateTimeField(blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     notes = models.TextField(blank=True)
 
     class Meta:
-        indexes = [models.Index(fields=['salon', 'start_datetime']),
-                   models.Index(fields=['customer', 'start_datetime'])]
+        indexes = [
+            models.Index(fields=['salon', 'start_datetime']),
+            models.Index(fields=['customer', 'start_datetime'])
+        ]
         ordering = ['-start_datetime']
 
     def save(self, *args, **kwargs):
@@ -147,9 +134,9 @@ class MaleBooking(models.Model):
     def __str__(self):
         return f"Booking #{self.pk} — {self.customer} @ {self.salon} on {self.start_datetime.isoformat()}"
 
-# -----------------------------------
+# ---------------------------
 # Male Payment
-# -----------------------------------
+# ---------------------------
 class MalePayment(models.Model):
     METHOD_CHOICES = [
         ('mpesa', 'M-Pesa'),
@@ -174,12 +161,12 @@ class MalePayment(models.Model):
     def __str__(self):
         return f"Payment {self.amount} ({self.get_status_display()}) for Booking {self.booking_id}"
 
-# -----------------------------------
+# ---------------------------
 # Male Review
-# -----------------------------------
+# ---------------------------
 class MaleReview(models.Model):
     booking = models.OneToOneField(MaleBooking, related_name='review', on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, related_name='male_reviews', on_delete=models.CASCADE)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='male_reviews', on_delete=models.CASCADE)
     salon = models.ForeignKey(MaleSalon, related_name='reviews', on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField(blank=True)
@@ -190,6 +177,3 @@ class MaleReview(models.Model):
 
     def __str__(self):
         return f"{self.rating}⭐ — {self.salon.name} by {self.customer.username}"
-from django.db import models
-
-# Create your models here.

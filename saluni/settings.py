@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'saluni_kike',
     'saluni_kiume',
     'dashboard',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -124,6 +125,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# settings.py
-AUTH_USER_MODEL = 'saluni_kike.Customer'  # saluni_kike = jina la app yako
+AUTH_USER_MODEL = 'accounts.Customer'
 

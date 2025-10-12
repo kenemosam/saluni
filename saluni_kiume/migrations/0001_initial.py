@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Salon',
+            name='MaleSalon',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200)),
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Booking',
+            name='MaleBooking',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('start_datetime', models.DateTimeField()),
@@ -50,15 +50,15 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('notes', models.TextField(blank=True)),
-                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bookings', to=settings.AUTH_USER_MODEL)),
-                ('salon', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bookings', to='saluni_kike.salon')),
+                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='male_bookings', to=settings.AUTH_USER_MODEL)),
+                ('salon', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bookings', to='saluni_kiume.malesalon')),
             ],
             options={
                 'ordering': ['-start_datetime'],
             },
         ),
         migrations.CreateModel(
-            name='Payment',
+            name='MalePayment',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('amount', models.DecimalField(decimal_places=2, max_digits=10, validators=[django.core.validators.MinValueValidator(0)])),
@@ -66,26 +66,26 @@ class Migration(migrations.Migration):
                 ('status', models.CharField(choices=[('initiated', 'Initiated'), ('success', 'Success'), ('failed', 'Failed'), ('refunded', 'Refunded')], default='initiated', max_length=20)),
                 ('transaction_id', models.CharField(blank=True, max_length=200, null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('booking', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='payment', to='saluni_kike.booking')),
+                ('booking', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='payment', to='saluni_kiume.malebooking')),
             ],
         ),
         migrations.CreateModel(
-            name='Review',
+            name='MaleReview',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('rating', models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(5)])),
                 ('comment', models.TextField(blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('booking', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='review', to='saluni_kike.booking')),
-                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to=settings.AUTH_USER_MODEL)),
-                ('salon', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to='saluni_kike.salon')),
+                ('booking', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='review', to='saluni_kiume.malebooking')),
+                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='male_reviews', to=settings.AUTH_USER_MODEL)),
+                ('salon', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to='saluni_kiume.malesalon')),
             ],
             options={
                 'ordering': ['-created_at'],
             },
         ),
         migrations.CreateModel(
-            name='Service',
+            name='MaleService',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=150)),
@@ -93,7 +93,7 @@ class Migration(migrations.Migration):
                 ('price', models.DecimalField(decimal_places=2, max_digits=10, validators=[django.core.validators.MinValueValidator(0)])),
                 ('duration_minutes', models.PositiveIntegerField(default=30)),
                 ('active', models.BooleanField(default=True)),
-                ('salon', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='services', to='saluni_kike.salon')),
+                ('salon', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='services', to='saluni_kiume.malesalon')),
             ],
             options={
                 'ordering': ['salon', 'name'],
@@ -101,12 +101,12 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.AddField(
-            model_name='booking',
+            model_name='malebooking',
             name='service',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bookings', to='saluni_kike.service'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bookings', to='saluni_kiume.maleservice'),
         ),
         migrations.CreateModel(
-            name='Stylist',
+            name='MaleStylist',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=150)),
@@ -114,40 +114,40 @@ class Migration(migrations.Migration):
                 ('specialties', models.JSONField(blank=True, default=list, null=True)),
                 ('is_active', models.BooleanField(default=True)),
                 ('photo_url', models.URLField(blank=True, null=True)),
-                ('salon', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='stylists', to='saluni_kike.salon')),
+                ('salon', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='stylists', to='saluni_kiume.malesalon')),
             ],
             options={
                 'ordering': ['salon', 'name'],
             },
         ),
         migrations.AddField(
-            model_name='booking',
+            model_name='malebooking',
             name='stylist',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='bookings', to='saluni_kike.stylist'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='bookings', to='saluni_kiume.malestylist'),
         ),
         migrations.CreateModel(
-            name='AvailabilitySlot',
+            name='MaleAvailabilitySlot',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('start', models.DateTimeField()),
                 ('end', models.DateTimeField()),
                 ('is_booked', models.BooleanField(default=False)),
-                ('stylist', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='availability', to='saluni_kike.stylist')),
+                ('stylist', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='availability', to='saluni_kiume.malestylist')),
             ],
             options={
                 'ordering': ['stylist', 'start'],
             },
         ),
         migrations.AddIndex(
-            model_name='booking',
-            index=models.Index(fields=['salon', 'start_datetime'], name='saluni_kike_salon_i_e3607f_idx'),
+            model_name='malebooking',
+            index=models.Index(fields=['salon', 'start_datetime'], name='saluni_kium_salon_i_8e7e20_idx'),
         ),
         migrations.AddIndex(
-            model_name='booking',
-            index=models.Index(fields=['customer', 'start_datetime'], name='saluni_kike_custome_0c389e_idx'),
+            model_name='malebooking',
+            index=models.Index(fields=['customer', 'start_datetime'], name='saluni_kium_custome_d1ea1f_idx'),
         ),
         migrations.AddIndex(
-            model_name='availabilityslot',
-            index=models.Index(fields=['stylist', 'start'], name='saluni_kike_stylist_5c83d2_idx'),
+            model_name='maleavailabilityslot',
+            index=models.Index(fields=['stylist', 'start'], name='saluni_kium_stylist_6fcfba_idx'),
         ),
     ]
