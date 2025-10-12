@@ -1,22 +1,102 @@
-<h1>Book a service at {{ salon.name }}</h1>
-<form method="POST">
-    {% csrf_token %}
-    <label>Service:</label>
-    <select name="service">
-        {% for s in services %}
-        <option value="{{ s.id }}">{{ s.name }} — {{ s.price }} KES</option>
-        {% endfor %}
-    </select>
+{% extends "base.html" %}
 
-    <label>Stylist:</label>
-    <select name="stylist">
-        {% for st in stylists %}
-        <option value="{{ st.id }}">{{ st.name }}</option>
-        {% endfor %}
-    </select>
+{% block head %}
+<!-- Phosphor Icons -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+{% endblock %}
 
-    <label>Start Date & Time:</label>
-    <input type="datetime-local" name="start_datetime" required>
+{% block content %}
+<section class="booking-section">
+    <div class="container">
+        <!-- Salon Header -->
+        <div class="salon-header">
+            <div class="salon-image">
+                {% if salon.picha_kuu %}
+                    <img src="{{ salon.picha_kuu.url }}" alt="{{ salon.name }}">
+                {% else %}
+                    <img src="https://picsum.photos/800/400?random=1" alt="{{ salon.name }}">
+                {% endif %}
+            </div>
+            <div class="salon-info">
+                <h1><i class="ph ph-scissors" style="color:#ff4fa1;"></i> {{ salon.name }}</h1>
+                <p>
+                    <i class="ph ph-map-pin" style="color:#ff4fa1;"></i>
+                    {{ salon.street }}, {{ salon.district }}, {{ salon.region }}
+                </p>
+                {% if salon.phone %}
+                <p>
+                    <i class="ph ph-phone" style="color:#4caf50;"></i>
+                    {{ salon.phone }}
+                </p>
+                {% endif %}
+            </div>
+        </div>
 
-    <button type="submit">Book</button>
-</form>
+        <!-- Booking Form -->
+        <div class="booking-form-card">
+            <h2><i class="ph ph-calendar-plus" style="color:#c2185b;"></i> Weka Booking</h2>
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="service">Huduma</label>
+                    <select name="service" id="service" required>
+                        {% for s in services %}
+                        <option value="{{ s.id }}">{{ s.name }} — {{ s.price }} KES</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="stylist">Stylist</label>
+                    <select name="stylist" id="stylist" required>
+                        {% for st in stylists %}
+                        <option value="{{ st.id }}">{{ st.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="start_datetime">Muda wa Kuanzia</label>
+                    <input type="datetime-local" name="start_datetime" id="start_datetime" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Maelezo (hiari)</label>
+                    <textarea name="notes" id="notes" rows="3" placeholder="Andika maelezo yoyote..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Thibitisha Booking</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Styles -->
+<style>
+body { font-family: 'Poppins', sans-serif; background:#fff5f8; color:#333; }
+.container { max-width:800px; margin:30px auto; padding:20px; }
+
+/* Salon Header */
+.salon-header { display:flex; flex-wrap:wrap; gap:20px; margin-bottom:30px; }
+.salon-image img { width:100%; max-width:400px; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+.salon-info { flex:1; min-width:200px; }
+.salon-info h1 { font-size:1.8rem; color:#182848; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.salon-info p { font-size:0.95rem; margin:5px 0; display:flex; align-items:center; gap:5px; }
+
+/* Booking Form */
+.booking-form-card { background:#fff; padding:25px; border-radius:15px; box-shadow:0 8px 25px rgba(0,0,0,0.12); }
+.booking-form-card h2 { font-size:1.5rem; margin-bottom:20px; color:#4b6cb7; display:flex; align-items:center; gap:8px; }
+.form-group { margin-bottom:15px; }
+label { font-weight:600; display:block; margin-bottom:5px; }
+select, input, textarea { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; font-size:0.95rem; }
+textarea { resize:none; }
+.submit-btn { width:100%; padding:12px; background:#4caf50; color:white; font-weight:bold; border:none; border-radius:10px; cursor:pointer; margin-top:10px; }
+.submit-btn:hover { background:#43a047; }
+
+/* Icons hover */
+.salon-info i:hover { transform: scale(1.2); transition: transform 0.2s; }
+</style>
+{% endblock %}
