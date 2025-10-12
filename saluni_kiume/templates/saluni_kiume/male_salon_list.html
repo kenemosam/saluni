@@ -1,11 +1,94 @@
-<h1>Male Salons</h1>
-<ul>
-{% for salon in salons %}
-    <li>
-        <a href="{% url 'kiume:male_salon_detail' salon.id %}">{{ salon.name }}</a>
-        - {{ salon.address }}
-    </li>
-{% empty %}
-    <li>No male salons found.</li>
-{% endfor %}
-</ul>
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-slideshow">
+        <div class="slide active" style="background-image: url('https://picsum.photos/id/1011/1600/400');"></div>
+        <div class="slide" style="background-image: url('https://picsum.photos/id/1012/1600/400');"></div>
+        <div class="slide" style="background-image: url('https://picsum.photos/id/1013/1600/400');"></div>
+    </div>
+    <div class="hero-overlay">
+        <div class="hero-content">
+            <h1>🔍 Pata Salon Bora Karibu Nawe</h1>
+            <p>Chagua salon, ona huduma na bei kwa urahisi</p>
+            <input type="text" placeholder="Tafuta salon kwa jina au eneo..." class="search-input">
+        </div>
+    </div>
+</section>
+
+<!-- Salons Grid -->
+<section class="salons-section">
+    <div class="salon-grid">
+        {% for salon in salons %}
+        <div class="salon-card">
+            <div class="salon-image">
+                {% if salon.picha_kuu %}
+                    <img src="{{ salon.picha_kuu.url }}" alt="{{ salon.name }}">
+                {% else %}
+                    <img src="https://picsum.photos/300/180?random={{ forloop.counter }}" alt="{{ salon.name }}">
+                {% endif %}
+            </div>
+            <div class="salon-info">
+                <p class="address"><i class="ph ph-map-pin"></i> {{ salon.street }}, {{ salon.region }}</p>
+            </div>
+            <a href="{% url 'kiume:male_salon_detail' salon.id %}" class="btn-check">Angalia</a>
+        </div>
+        {% empty %}
+        <div class="no-results">
+            <h3>Hakuna Salon Zilizopatikana</h3>
+            <p>Badilisha vichujio vyako au jaribu tena baadaye</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<style>
+body { font-family: 'Mulish', sans-serif; background: #fff5f8; margin:0; }
+:root {
+    --primary: #4b6cb7;
+    --primary-end: #182848;
+    --white: #ffffff;
+    --shadow: 0 8px 25px rgba(0,0,0,0.15);
+    --radius: 10px;
+}
+.hero-section { position: relative; height: 400px; overflow: hidden; }
+.hero-slideshow { position:absolute; top:0; left:0; right:0; bottom:0; }
+.hero-slideshow .slide { position:absolute; top:0; left:0; right:0; bottom:0; background-size:cover; background-position:center; opacity:0; transition: opacity 1s ease-in-out; }
+.hero-slideshow .slide.active { opacity:1; }
+.hero-overlay { position: relative; z-index:2; background: rgba(0,0,0,0.3); width: 100%; height: 100%; display:flex; flex-direction: column; justify-content:center; align-items:center; text-align:center; padding:0 20px; }
+.hero-overlay h1 { font-size:3rem; color:#fff; margin-bottom:10px; font-weight:700; }
+.hero-overlay p { font-size:1.3rem; color:#fff; margin-bottom:20px; }
+.search-input { padding:14px 20px; border-radius:50px; border:none; width:350px; max-width:100%; font-size:1rem; }
+.salon-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap:25px; padding:40px 20px; }
+.salon-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; border:1px solid #ffe6f0; min-height:250px; transition:all 0.3s ease; }
+.salon-card:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,0.15); }
+.salon-image img { width:100%; height:150px; object-fit:cover; border-top-left-radius: var(--radius); border-top-right-radius: var(--radius); }
+.salon-info { padding:10px; text-align:center; }
+.address { font-size:0.95rem; color:#666; margin-bottom:10px; display:flex; align-items:center; justify-content:center; gap:5px; }
+.address i { color:var(--primary); }
+.btn-check { display:block; width:90%; margin:10px auto 15px auto; padding:10px 0; text-align:center; background: linear-gradient(90deg, var(--primary), var(--primary-end)); color: var(--white); border-radius:6px; text-decoration:none; font-weight:600; transition:0.3s; }
+.btn-check:hover { opacity:0.9; }
+.no-results { text-align:center; padding:50px 20px; }
+@media(min-width:1200px){ .salon-grid { grid-template-columns: repeat(6,1fr); } }
+@media(max-width:1199px){ .salon-grid { grid-template-columns: repeat(4,1fr); } }
+@media(max-width:992px){ .salon-grid { grid-template-columns: repeat(3,1fr); } }
+@media(max-width:768px){ .salon-grid { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:480px){ .salon-grid { grid-template-columns: 1fr; } }
+</style>
+
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+<script>
+// Hero Slideshow
+let slides = document.querySelectorAll('.hero-slideshow .slide');
+let current = 0;
+function nextSlide(){
+    slides[current].classList.remove('active');
+    current = (current+1)%slides.length;
+    slides[current].classList.add('active');
+}
+setInterval(nextSlide,5000);
+</script>
+
+{% endblock %}

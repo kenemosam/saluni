@@ -24,21 +24,6 @@ def male_salon_detail(request, salon_id):
         'stylists': stylists
     })
 
-# ---------------------------
-# Male salon services JSON (optional)
-# ---------------------------
-def male_salon_list_json(request):
-    salons = MaleSalon.objects.all()
-    data = [
-        {
-            'id': s.id,
-            'name': s.name,
-            'address': s.address,
-            'phone': s.phone,
-            'email': s.email,
-        } for s in salons
-    ]
-    return JsonResponse(data, safe=False)
 
 # ---------------------------
 # Create booking (male salon)
