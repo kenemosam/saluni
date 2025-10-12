@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="register-section">
+    <div class="container">
+        <div class="register-card">
+            <h2>Jisajili Saluni ya Kiume</h2>
+
+            {% if form.errors %}
+            <div class="error-message">
+                Tafadhali hakikisha umejaza taarifa zako kwa usahihi.
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    {{ form.phone.label_tag }}
+                    {{ form.phone }}
+                </div>
+                <button type="submit" class="btn-submit">Jisajili</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+body { font-family: 'Poppins', sans-serif; background:#f0f4f8; }
+.container { max-width: 400px; margin: 50px auto; padding: 20px; }
+.register-card { background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+h2 { text-align:center; color:#4b6cb7; margin-bottom:20px; }
+.form-group { margin-bottom:15px; }
+input { width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:0.95rem; }
+.btn-submit { width:100%; padding:12px; background:#4b6cb7; color:#fff; font-weight:bold; border:none; border-radius:10px; cursor:pointer; }
+.btn-submit:hover { background:#3f51b5; }
+.error-message { color:#c2185b; font-weight:600; margin-bottom:15px; text-align:center; }
+</style>
+{% endblock %}

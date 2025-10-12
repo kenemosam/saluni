@@ -79,3 +79,49 @@ def create_male_booking(request, salon_id):
 def male_booking_detail(request, booking_id):
     booking = get_object_or_404(MaleBooking, id=booking_id)
     return render(request, 'saluni_kiume/male_booking_detail.html', {'booking': booking})
+
+
+
+# saluni_kiume/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import MaleSalonForm, SalonProfileForm
+from .models import MaleSalon  # <-- import the correct model
+
+def male_salon_register(request):
+    if request.method == 'POST':
+        form = MaleSalonForm(request.POST)
+        if form.is_valid():
+            salon = form.save()  # minimal male salon created
+            return redirect('kiume:male_salon_update', salon_id=salon.id)  # use namespace
+    else:
+        form = MaleSalonForm()
+    return render(request, 'saluni_kiume/register_salon.html', {'form': form})
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .forms import SalonProfileForm
+from .models import MaleSalon
+
+def male_salon_update(request, salon_id):
+    # Fetch the salon instance or return 404
+    salon = get_object_or_404(MaleSalon, id=salon_id)
+
+    if request.method == 'POST':
+        # Bind form to POST data and existing salon instance
+        form = SalonProfileForm(request.POST, instance=salon)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Salon profile updated successfully!")
+            return redirect('kiume:male_salon_detail', salon_id=salon.id)
+        else:
+            print("Form errors:", form.errors)  # Debugging
+    else:
+        # Pre-populate the form with existing salon data
+        form = SalonProfileForm(instance=salon)
+
+    # Pass both form and salon to the template
+    return render(request, 'saluni_kiume/update_profile.html', {
+        'form': form,
+        'salon': salon
+    })
