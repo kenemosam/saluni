@@ -64,9 +64,27 @@
         {% endif %}
 
         <!-- Services -->
-        {% if services %}
         <div class="salon-services">
             <h2><i class="ph ph-list-bullets" style="color:#c2185b;"></i> Huduma Zilizopo</h2>
+
+            <!-- Debug Line (remove later) -->
+            {% if user.is_authenticated %}
+            <p style="font-size:0.85rem; color:gray;">
+                User: {{ user.username }} | Staff: {{ user.is_staff }}
+            </p>
+            {% endif %}
+
+            <!-- Add Service Button for Staff -->
+            {% if user.is_authenticated and user.is_staff %}
+            <div style="margin-bottom:15px;">
+                <a href="{% url 'kiume:add_male_service' salon.id %}" 
+                   style="padding:8px 14px; background:#ff4081; color:white; border-radius:8px; text-decoration:none; font-weight:bold;">
+                   <i class="ph ph-plus-circle" style="margin-right:6px;"></i> Ongeza Huduma Mpya
+                </a>
+            </div>
+            {% endif %}
+
+            {% if services %}
             <div class="hairstyles-scroll">
                 {% for service in services %}
                 <div class="hairstyle-card">
@@ -75,15 +93,15 @@
                 </div>
                 {% endfor %}
             </div>
+            {% else %}
+            <p>Hakuna huduma zilizopatikana.</p>
+            {% endif %}
         </div>
-        {% else %}
-        <p>Hakuna huduma zilizopatikana.</p>
-        {% endif %}
 
         <!-- Stylists -->
-        {% if stylists %}
         <div class="salon-stylists">
             <h2><i class="ph ph-users-three" style="color:#c2185b;"></i> Wasusi</h2>
+            {% if stylists %}
             <div class="stylist-carousel">
                 {% for stylist in stylists %}
                 <div class="stylist-circle">
@@ -96,10 +114,10 @@
                 </div>
                 {% endfor %}
             </div>
+            {% else %}
+            <p>Hakuna wasusi waliopatikana.</p>
+            {% endif %}
         </div>
-        {% else %}
-        <p>Hakuna wasusi waliopatikana.</p>
-        {% endif %}
     </div>
 </section>
 
@@ -116,7 +134,7 @@ body { font-family: 'Poppins', sans-serif; background:#fff5f8; color:#333; }
 .salon-info p { font-size:0.95rem; margin:5px 0; display:flex; align-items:center; gap:5px; }
 
 /* Buttons */
-.weka-booking-btn { display: inline-flex; align-items:center; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:bold; margin-top:15px; background:#4caf50; color:#fff; transition:all 0.3s; }
+.weka-booking-btn { display:inline-flex; align-items:center; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:bold; margin-top:15px; background:#4caf50; color:#fff; transition:all 0.3s; }
 .weka-booking-btn:hover { background:#43a047; transform:translateY(-2px); }
 
 /* Sections */

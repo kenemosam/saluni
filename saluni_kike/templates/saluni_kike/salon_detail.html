@@ -63,10 +63,10 @@
                 {% endif %}
 
                 <!-- Buttons -->
-                <a href="{% url 'create_booking' salon.id %}" class="weka-booking-btn">
+                <a href="{% url 'kike:create_booking' salon.id %}" class="weka-booking-btn">
                     <i class="ph ph-calendar-plus" style="margin-right:6px;"></i> Weka Booking
                 </a>
-                <a href="{% url 'salon_update_profile' salon.id %}" class="edit-profile-btn">
+                <a href="{% url 'kike:salon_update_profile' salon.id %}" class="edit-profile-btn">
                     <i class="ph ph-pencil-line" style="margin-right:6px;"></i> Edit Profile
                 </a>
             </div>

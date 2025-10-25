@@ -37,14 +37,23 @@
         <!-- Booking Form -->
         <div class="booking-form-card">
             <h2><i class="ph ph-calendar-plus" style="color:#c2185b;"></i> Weka Booking</h2>
+
+            {% if error %}
+            <p style="color:red; font-weight:600;">{{ error }}</p>
+            {% endif %}
+
             <form method="POST">
                 {% csrf_token %}
 
                 <div class="form-group">
                     <label for="service">Huduma</label>
                     <select name="service" id="service" required>
+                        <option value="" disabled {% if not request.POST.service %}selected{% endif %}>Chagua huduma</option>
                         {% for s in services %}
-                        <option value="{{ s.id }}">{{ s.name }} — {{ s.price }} KES</option>
+                        <option value="{{ s.id }}" 
+                            {% if request.POST.service|default:'' == s.id|stringformat:"s" %}selected{% endif %}>
+                            {{ s.name }} — KES {{ s.price|floatformat:2 }}
+                        </option>
                         {% endfor %}
                     </select>
                 </div>
@@ -52,20 +61,26 @@
                 <div class="form-group">
                     <label for="stylist">Stylist</label>
                     <select name="stylist" id="stylist" required>
+                        <option value="" disabled {% if not request.POST.stylist %}selected{% endif %}>Chagua stylist</option>
                         {% for st in stylists %}
-                        <option value="{{ st.id }}">{{ st.name }}</option>
+                        <option value="{{ st.id }}" 
+                            {% if request.POST.stylist|default:'' == st.id|stringformat:"s" %}selected{% endif %}>
+                            {{ st.name }}
+                            {% if st.specialties %} — {{ st.specialties|join:", " }}{% endif %}
+                        </option>
                         {% endfor %}
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="start_datetime">Muda wa Kuanzia</label>
-                    <input type="datetime-local" name="start_datetime" id="start_datetime" required>
+                    <input type="datetime-local" name="start_datetime" id="start_datetime" 
+                           value="{{ request.POST.start_datetime }}" required>
                 </div>
 
                 <div class="form-group">
                     <label for="notes">Maelezo (hiari)</label>
-                    <textarea name="notes" id="notes" rows="3" placeholder="Andika maelezo yoyote..."></textarea>
+                    <textarea name="notes" id="notes" rows="3" placeholder="Andika maelezo yoyote...">{{ request.POST.notes }}</textarea>
                 </div>
 
                 <button type="submit" class="submit-btn">Thibitisha Booking</button>
