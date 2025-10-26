@@ -16,6 +16,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import SalonProfileForm
 from .models import MaleSalon
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import MaleSalon, MaleStylist
+from .forms import MaleStylistForm  # create a form for MaleStylist
 
 # ---------------------------
 # List all male salons
@@ -162,23 +166,50 @@ class MaleServiceForm(forms.ModelForm):
 def add_male_service(request, salon_id):
     salon = get_object_or_404(MaleSalon, id=salon_id)
 
+    # Only staff can add services
+    if not request.user.is_staff:
+        messages.error(request, "You are not authorized to add a service.")
+        return redirect('kiume:male_salon_detail', salon_id=salon.id)
+
     if request.method == 'POST':
         form = MaleServiceForm(request.POST)
         if form.is_valid():
-            # Ensure the service is linked to the salon
             service = form.save(commit=False)
             service.salon = salon
             try:
-                service.full_clean()  # Validate unique_together
+                service.full_clean()  # Validate model constraints
                 service.save()
-                return redirect('male_service_list', salon_id=salon.id)
+                messages.success(request, "Huduma mpya imeongezwa!")
+                # Redirect to the salon detail page to show all services
+                return redirect('kiume:male_salon_detail', salon_id=salon.id)
             except ValidationError as e:
                 form.add_error(None, e)
     else:
         form = MaleServiceForm()
 
-    return render(request, 'male_service_add.html', {
+    return render(request, 'saluni_kiume/male_service_add.html', {
         'form': form,
         'salon': salon
     })
+
+
+@login_required
+def add_male_stylist(request, salon_id):
+    salon = get_object_or_404(MaleSalon, id=salon_id)
+
+    if request.method == 'POST':
+        form = MaleStylistForm(request.POST)
+        if form.is_valid():
+            stylist = form.save(commit=False)
+            stylist.salon = salon
+            stylist.save()
+            return redirect('kiume:male_salon_detail', salon_id=salon.id)
+    else:
+        form = MaleStylistForm()
+
+    return render(request, 'saluni_kiume/male_stylist_add.html', {
+        'form': form,
+        'salon': salon
+    })
+
 

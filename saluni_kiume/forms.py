@@ -27,3 +27,13 @@ class SalonProfileForm(forms.ModelForm):
             'latitude': forms.HiddenInput(),
             'longitude': forms.HiddenInput(),
         }
+
+
+from django import forms
+from .models import MaleStylist
+
+class MaleStylistForm(forms.ModelForm):
+    class Meta:
+        model = MaleStylist
+        fields = ['name', 'bio', 'photo_url', 'is_active']
+

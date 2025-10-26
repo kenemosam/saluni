@@ -1,6 +1,71 @@
-<h1>Booking #{{ booking.id }}</h1>
-<p>Salon: {{ booking.salon.name }}</p>
-<p>Service: {{ booking.service.name }}</p>
-<p>Stylist: {{ booking.stylist.name }}</p>
-<p>Start: {{ booking.start_datetime }}</p>
-<p>Status: {{ booking.status }}</p>
+{% extends "base.html" %}
+
+{% block head %}
+<!-- Phosphor Icons -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section class="booking-detail-section">
+    <div class="container">
+
+        <h1>
+            <i class="ph ph-calendar-check" style="color:#4caf50;"></i>
+            Maelezo ya Booking
+        </h1>
+
+        <div class="booking-info">
+            <p><strong>Salon:</strong> {{ booking.salon.name }}</p>
+            <p><strong>Huduma:</strong> {{ booking.service.name }}</p>
+            <p><strong>Bei:</strong> TSh {{ booking.service.price|floatformat:0 }}</p>
+            <p><strong>Muda wa Huduma:</strong> {{ booking.service.duration_minutes }} mins</p>
+            <p><strong>Tarehe ya Booking:</strong> {{ booking.booking_date }}</p>
+            <p><strong>Wakati:</strong> {{ booking.booking_time }}</p>
+            <p><strong>Jina la Mteja:</strong> {{ booking.customer_name }}</p>
+            <p><strong>Namba ya Simu:</strong> {{ booking.customer_phone }}</p>
+            {% if booking.notes %}
+            <p><strong>Maelezo Zaidi:</strong> {{ booking.notes }}</p>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fff5f8;
+    color: #333;
+}
+
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.booking-info {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    margin-top: 20px;
+}
+
+.booking-info p {
+    margin: 10px 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.booking-info strong {
+    color: #4b6cb7;
+    width: 150px;
+    flex-shrink: 0;
+}
+</style>
+{% endblock %}

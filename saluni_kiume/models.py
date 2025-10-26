@@ -44,6 +44,9 @@ class MaleSalon(models.Model):
 # ---------------------------
 # Male Service
 # ---------------------------
+from django.db import models
+from django.core.validators import MinValueValidator
+
 class MaleService(models.Model):
     salon = models.ForeignKey(MaleSalon, related_name='services', on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
@@ -51,6 +54,7 @@ class MaleService(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     duration_minutes = models.PositiveIntegerField(default=30)
     active = models.BooleanField(default=True)
+    image_url = models.URLField(blank=True, null=True)  # <-- Use URL instead of upload
 
     class Meta:
         unique_together = ('salon', 'name')
@@ -59,6 +63,7 @@ class MaleService(models.Model):
     def __str__(self):
         return f"{self.name} — {self.salon.name}"
 
+
 # ---------------------------
 # Male Stylist
 # ---------------------------
@@ -66,7 +71,6 @@ class MaleStylist(models.Model):
     salon = models.ForeignKey(MaleSalon, related_name='stylists', on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
     bio = models.TextField(blank=True)
-    specialties = models.JSONField(blank=True, null=True, default=list)
     is_active = models.BooleanField(default=True)
     photo_url = models.URLField(blank=True, null=True)
 

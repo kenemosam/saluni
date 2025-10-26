@@ -21,5 +21,6 @@ urlpatterns = [
     path('booking/<int:booking_id>/', views.male_booking_detail, name='male_booking_detail'),
 
     path('salon/<int:salon_id>/services/add/', views.add_male_service, name='add_male_service'),
+    path('add-stylist/<int:salon_id>/', views.add_male_stylist, name='add_male_stylist'),
 ]
 

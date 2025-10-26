@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block head %}
+<!-- Phosphor Icons -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section class="add-stylist-section">
+    <div class="container">
+
+        <h1>
+            <i class="ph ph-user-plus" style="color:#ff4081;"></i>
+            Ongeza Stylist Mpya kwa Salon: {{ salon.name }}
+        </h1>
+
+        <div class="form-container">
+            <form method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-field">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="help-text">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <p class="error-text">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+                    <div class="error-text">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="submit-btn">
+                    <i class="ph ph-check-circle" style="margin-right:6px;"></i>
+                    Weka Stylist
+                </button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fff5f8;
+    color: #333;
+}
+
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Form */
+.form-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    margin-top: 20px;
+}
+
+.form-field {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-field label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.form-field input,
+.form-field textarea {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+}
+
+.form-field textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.error-text {
+    color: #e91e63;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.help-text {
+    font-size: 0.8rem;
+    color: gray;
+}
+
+.submit-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: #4caf50;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.submit-btn:hover {
+    background: #43a047;
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}

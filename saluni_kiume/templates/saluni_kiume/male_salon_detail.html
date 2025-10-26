@@ -10,7 +10,8 @@
 {% block content %}
 <section class="salon-detail-section">
     <div class="container">
-        <!-- Salon Header -->
+
+        <!-- ================= Salon Header ================= -->
         <div class="salon-header">
             <div class="salon-image">
                 {% if salon.picha_kuu %}
@@ -19,8 +20,11 @@
                     <img src="https://picsum.photos/800/400?random=1" alt="{{ salon.name }}">
                 {% endif %}
             </div>
+
             <div class="salon-info">
-                <h1><i class="ph ph-scissors" style="color:#ff4fa1;"></i> {{ salon.name }}</h1>
+                <h1>
+                    <i class="ph ph-scissors" style="color:#ff4fa1;"></i> {{ salon.name }}
+                </h1>
 
                 <p>
                     <i class="ph ph-map-pin" style="color:#ff4fa1;"></i>
@@ -29,22 +33,22 @@
 
                 {% if salon.phone %}
                 <p>
-                    <i class="ph ph-phone" style="color:#4caf50;"></i>
-                    {{ salon.phone }}
+                    <i class="ph ph-phone" style="color:#4caf50;"></i> {{ salon.phone }}
                 </p>
                 {% endif %}
 
                 {% if salon.email %}
                 <p>
-                    <i class="ph ph-envelope" style="color:#ff9800;"></i>
-                    {{ salon.email }}
+                    <i class="ph ph-envelope" style="color:#ff9800;"></i> {{ salon.email }}
                 </p>
                 {% endif %}
 
                 {% if salon.website %}
                 <p>
                     <i class="ph ph-globe" style="color:#3f51b5;"></i>
-                    <a href="{{ salon.website }}" target="_blank">{{ salon.website }}</a>
+                    <a href="{{ salon.website }}" target="_blank" rel="noopener noreferrer">
+                        {{ salon.website }}
+                    </a>
                 </p>
                 {% endif %}
 
@@ -55,7 +59,7 @@
             </div>
         </div>
 
-        <!-- Salon Description -->
+        <!-- ================= Salon Description ================= -->
         {% if salon.description %}
         <div class="salon-description">
             <h2><i class="ph ph-info" style="color:#c2185b;"></i> Maelezo ya Salon</h2>
@@ -63,23 +67,14 @@
         </div>
         {% endif %}
 
-        <!-- Services -->
+        <!-- ================= Services ================= -->
         <div class="salon-services">
             <h2><i class="ph ph-list-bullets" style="color:#c2185b;"></i> Huduma Zilizopo</h2>
 
-            <!-- Debug Line (remove later) -->
-            {% if user.is_authenticated %}
-            <p style="font-size:0.85rem; color:gray;">
-                User: {{ user.username }} | Staff: {{ user.is_staff }}
-            </p>
-            {% endif %}
-
-            <!-- Add Service Button for Staff -->
             {% if user.is_authenticated and user.is_staff %}
-            <div style="margin-bottom:15px;">
-                <a href="{% url 'kiume:add_male_service' salon.id %}" 
-                   style="padding:8px 14px; background:#ff4081; color:white; border-radius:8px; text-decoration:none; font-weight:bold;">
-                   <i class="ph ph-plus-circle" style="margin-right:6px;"></i> Ongeza Huduma Mpya
+            <div class="add-service-btn left-align">
+                <a href="{% url 'kiume:add_male_service' salon.id %}">
+                    <i class="ph ph-plus-circle"></i> Ongeza Huduma Mpya
                 </a>
             </div>
             {% endif %}
@@ -88,8 +83,16 @@
             <div class="hairstyles-scroll">
                 {% for service in services %}
                 <div class="hairstyle-card">
+                    {% if service.image_url %}
+                        <img src="{{ service.image_url }}" alt="{{ service.name }}" class="service-image">
+                    {% else %}
+                        <img src="https://picsum.photos/200/150?random={{ forloop.counter }}" alt="{{ service.name }}" class="service-image">
+                    {% endif %}
                     <p class="name"><i class="ph ph-scissors"></i> {{ service.name }}</p>
-                    <p class="price"><i class="ph ph-currency-circle-dollar"></i> TSh {{ service.price|floatformat:0 }} ({{ service.duration_minutes }} mins)</p>
+                    <p class="price">
+                        <i class="ph ph-currency-circle-dollar"></i> 
+                        TSh {{ service.price|floatformat:0 }} ({{ service.duration_minutes }} mins)
+                    </p>
                 </div>
                 {% endfor %}
             </div>
@@ -98,9 +101,18 @@
             {% endif %}
         </div>
 
-        <!-- Stylists -->
+        <!-- ================= Stylists ================= -->
         <div class="salon-stylists">
             <h2><i class="ph ph-users-three" style="color:#c2185b;"></i> Wasusi</h2>
+
+            {% if user.is_authenticated and user.is_staff %}
+            <div class="add-stylist-btn left-align">
+                <a href="{% url 'kiume:add_male_stylist' salon.id %}">
+                    <i class="ph ph-plus-circle"></i> Ongeza Msubizi Mpya
+                </a>
+            </div>
+            {% endif %}
+
             {% if stylists %}
             <div class="stylist-carousel">
                 {% for stylist in stylists %}
@@ -121,36 +133,182 @@
     </div>
 </section>
 
-<!-- Styles -->
+<!-- ================= Inline Styles ================= -->
 <style>
-body { font-family: 'Poppins', sans-serif; background:#fff5f8; color:#333; }
-.container { max-width:1200px; margin:0 auto; padding:20px; }
+body { 
+    font-family: 'Poppins', sans-serif; 
+    background: #fff5f8; 
+    color: #333; 
+}
+
+.container { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 20px; 
+}
 
 /* Header */
-.salon-header { display:flex; flex-wrap:wrap; gap:20px; margin-bottom:30px; }
-.salon-image img { width:100%; max-width:500px; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.1); }
-.salon-info { flex:1; min-width:250px; }
-.salon-info h1 { font-size:2rem; color:#182848; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
-.salon-info p { font-size:0.95rem; margin:5px 0; display:flex; align-items:center; gap:5px; }
+.salon-header { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 20px; 
+    margin-bottom: 30px; 
+}
 
-/* Buttons */
-.weka-booking-btn { display:inline-flex; align-items:center; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:bold; margin-top:15px; background:#4caf50; color:#fff; transition:all 0.3s; }
-.weka-booking-btn:hover { background:#43a047; transform:translateY(-2px); }
+.salon-image img { 
+    width: 100%; 
+    max-width: 500px; 
+    border-radius: 15px; 
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1); 
+}
+
+.salon-info { 
+    flex: 1; 
+    min-width: 250px; 
+}
+
+.salon-info h1 { 
+    font-size: 2rem; 
+    color: #182848; 
+    margin-bottom: 10px; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+}
+
+.salon-info p { 
+    font-size: 0.95rem; 
+    margin: 5px 0; 
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+}
+
+/* Booking Button */
+.weka-booking-btn { 
+    display: inline-flex; 
+    align-items: center; 
+    padding: 10px 20px; 
+    border-radius: 10px; 
+    text-decoration: none; 
+    font-weight: bold; 
+    margin-top: 15px; 
+    background: #4caf50; 
+    color: #fff; 
+    transition: all 0.3s; 
+}
+.weka-booking-btn:hover { 
+    background: #43a047; 
+    transform: translateY(-2px); 
+}
 
 /* Sections */
-.salon-description, .salon-services, .salon-stylists { margin-bottom:30px; padding:20px; background:#fff; border-radius:15px; box-shadow:0 6px 15px rgba(0,0,0,0.08); }
-.salon-description h2, .salon-services h2, .salon-stylists h2 { font-size:1.5rem; color:#4b6cb7; margin-bottom:15px; display:flex; align-items:center; gap:8px; }
+.salon-description, .salon-services, .salon-stylists { 
+    margin-bottom: 30px; 
+    padding: 20px; 
+    background: #fff; 
+    border-radius: 15px; 
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08); 
+}
+.salon-description h2, 
+.salon-services h2, 
+.salon-stylists h2 { 
+    font-size: 1.5rem; 
+    color: #4b6cb7; 
+    margin-bottom: 15px; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+}
+
+/* Add Buttons (Left Aligned) */
+.add-service-btn, .add-stylist-btn {
+    text-align: left;
+    margin-bottom: 15px;
+}
+.add-service-btn a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #ff4081;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+.add-service-btn a:hover { background: #e91e63; }
+
+.add-stylist-btn a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #2196f3;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+.add-stylist-btn a:hover { background: #1976d2; }
 
 /* Services Scroll */
-.hairstyles-scroll { display:flex; overflow-x:auto; gap:15px; padding-bottom:10px; scroll-snap-type:x mandatory; }
-.hairstyle-card { flex:0 0 auto; width:180px; border-radius:15px; text-align:center; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.1); scroll-snap-align:start; padding:10px; background:#fff; }
-.hairstyle-card:hover { transform:translateY(-3px); }
+.hairstyles-scroll { 
+    display: flex; 
+    overflow-x: auto; 
+    gap: 15px; 
+    padding-bottom: 10px; 
+    scroll-snap-type: x mandatory; 
+}
+.hairstyle-card { 
+    flex: 0 0 auto; 
+    width: 180px; 
+    border-radius: 15px; 
+    text-align: center; 
+    overflow: hidden; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    scroll-snap-align: start; 
+    padding: 10px; 
+    background: #fff; 
+    transition: transform 0.3s; 
+}
+.hairstyle-card:hover { transform: translateY(-3px); }
+
+.service-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
 
 /* Stylists Carousel */
-.stylist-carousel { display:flex; gap:20px; overflow-x:auto; padding-bottom:10px; scroll-snap-type:x mandatory; }
-.stylist-circle { flex:0 0 auto; text-align:center; scroll-snap-align:start; transition:transform 0.2s; }
-.stylist-circle img { width:120px; height:120px; object-fit:cover; border-radius:50%; padding:4px; background: linear-gradient(90deg, #4b6cb7, #182848); }
-.stylist-circle h4 { margin-top:10px; font-size:0.95rem; color:#333; }
+.stylist-carousel { 
+    display: flex; 
+    gap: 20px; 
+    overflow-x: auto; 
+    padding-bottom: 10px; 
+    scroll-snap-type: x mandatory; 
+}
+.stylist-circle { 
+    flex: 0 0 auto; 
+    text-align: center; 
+    scroll-snap-align: start; 
+    transition: transform 0.2s; 
+}
+.stylist-circle img { 
+    width: 120px; 
+    height: 120px; 
+    object-fit: cover; 
+    border-radius: 50%; 
+    padding: 4px; 
+    background: linear-gradient(90deg, #4b6cb7, #182848); 
+}
+.stylist-circle h4 { 
+    margin-top: 10px; 
+    font-size: 0.95rem; 
+    color: #333; 
+}
 .stylist-circle:hover img { transform: scale(1.05); }
 </style>
 {% endblock %}
